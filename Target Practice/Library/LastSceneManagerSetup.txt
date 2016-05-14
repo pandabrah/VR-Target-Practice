@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Target Practice.unity
+  isLoaded: 1
+  isActive: 1
