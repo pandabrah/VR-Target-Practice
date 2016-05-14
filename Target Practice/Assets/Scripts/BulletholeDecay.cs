@@ -3,6 +3,7 @@ using System.Collections;
 
 public class BulletholeDecay : MonoBehaviour {
 
+    //Sets time for bulletholes to decay
     public float duration = 1f;
 
 	void FixedUpdate () {

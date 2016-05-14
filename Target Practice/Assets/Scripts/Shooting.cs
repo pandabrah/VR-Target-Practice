@@ -2,7 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Shooting : MonoBehaviour {
+public class Shooting : MonoBehaviour
+{
 
     public GameObject bulletDecal;
     public Text targetHitText;
@@ -24,10 +25,10 @@ public class Shooting : MonoBehaviour {
         Ray targetRay = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 100, Color.green);
 
-        if (holdingGun == true && Input.GetKeyDown(KeyCode.E))
-        {
-            DropWeapon();
-        }
+        //if (holdingGun == true && Input.GetKeyDown(KeyCode.E))
+        //{
+        //    DropWeapon();
+        //}
 
         if (Physics.Raycast(targetRay, out hit))
         {
@@ -45,7 +46,7 @@ public class Shooting : MonoBehaviour {
                 gunCanPickUp = false;
             }
 
-            if (Input.GetButtonDown("Fire1"))
+            if (holdingGun == true && Input.GetButtonDown("Fire1"))
             {
                 Debug.Log("Object Hit: " + hit.collider.gameObject.name);
 
@@ -68,14 +69,21 @@ public class Shooting : MonoBehaviour {
     {
         Destroy(gun.GetComponent<Rigidbody>());
         gun.transform.SetParent(Camera.main.transform);
-        gun.transform.localPosition = new Vector3(0.48f, -0.43f, 0.84f);
-        gun.transform.localRotation = Quaternion.Euler(0, 270, 0);
+        holdingGun = true;
+
+        //Position for original "detailed" model
+        //gun.transform.localPosition = new Vector3(0.48f, -0.43f, 0.84f);
+        //gun.transform.localRotation = Quaternion.Euler(0, 270, 0);
+
+        //Position for simple animated model
+        gun.transform.localPosition = new Vector3(0.6f, -0.5f, 1.1f);
+        gun.transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
 
-    void DropWeapon()
-    {
-
-    }
+    //void DropWeapon(GameObject gun)
+    //{
+    //    gun.AddComponent<Rigidbody>();
+    //}
 
     void UpdateHitCounter()
     {
@@ -105,7 +113,7 @@ public class Shooting : MonoBehaviour {
                 target.transform.position = newPosition;
             }
         }
-        
+
         else if (target.name == ("TargetSide"))
         {
             Vector3 startPosition = target.transform.position;
