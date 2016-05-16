@@ -5,14 +5,15 @@ using System.Collections;
 public class Shooting : MonoBehaviour
 {
 
-    public GameObject bulletDecal;
+    public Texture bulletDecal;
     public Text targetHitText;
+    private GUIStyle guiFont = new GUIStyle();
 
     private int targetHitCounter = 0;
     private bool holdingGun = false;
     private bool gunCanPickUp = false;
-
-    private GUIStyle guiFont = new GUIStyle();
+    private int ammoCount = 17;
+    private GameObject heldGun = null;
 
     void Awake()
     {
@@ -25,10 +26,15 @@ public class Shooting : MonoBehaviour
         Ray targetRay = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 100, Color.green);
 
-        //if (holdingGun == true && Input.GetKeyDown(KeyCode.E))
-        //{
-        //    DropWeapon();
-        //}
+        if (holdingGun == true && Input.GetKeyDown(KeyCode.E))
+        {
+            DropWeapon(heldGun);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetAmmoCount(ammoCount);
+        }
 
         if (Physics.Raycast(targetRay, out hit))
         {
@@ -50,9 +56,15 @@ public class Shooting : MonoBehaviour
             {
                 Debug.Log("Object Hit: " + hit.collider.gameObject.name);
 
-                if (hit.collider.tag != ("Target"))
+                UpdateAmmoCount(ammoCount);
+                if (ammoCount == 0)
                 {
-                    Instantiate(bulletDecal, hit.point, Quaternion.identity);
+                    return;
+                }
+
+                else if (hit.collider.tag != ("Target"))
+                {
+                    Instantiate(bulletDecal, hit.point, hit.transform.localRotation);
                 }
 
                 else if (hit.collider.tag == ("Target"))
@@ -65,11 +77,22 @@ public class Shooting : MonoBehaviour
         }
     }
 
+    void UpdateAmmoCount(int ammo)
+    {
+        ammo -= ammo;
+    }
+
+    void ResetAmmoCount(int ammo)
+    {
+        ammo = 17;
+    }
+
     void PickUpWeapon(GameObject gun)
     {
         Destroy(gun.GetComponent<Rigidbody>());
         gun.transform.SetParent(Camera.main.transform);
         holdingGun = true;
+        heldGun = gun;
 
         //Position for original "detailed" model
         //gun.transform.localPosition = new Vector3(0.48f, -0.43f, 0.84f);
@@ -80,10 +103,12 @@ public class Shooting : MonoBehaviour
         gun.transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
 
-    //void DropWeapon(GameObject gun)
-    //{
-    //    gun.AddComponent<Rigidbody>();
-    //}
+    void DropWeapon(GameObject gun)
+    {
+        gun.AddComponent<Rigidbody>();
+        Camera.main.transform.DetachChildren();
+        holdingGun = false;
+    }
 
     void UpdateHitCounter()
     {
