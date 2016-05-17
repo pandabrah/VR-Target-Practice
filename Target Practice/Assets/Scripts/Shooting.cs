@@ -10,10 +10,10 @@ public class Shooting : MonoBehaviour
     public Text targetHitText;
 
     private int targetHitCounter = 0;
-    private bool holdingGun = false;
-    private bool gunCanPickUp = false;
-    private int ammoCount = 17;
-    private GameObject heldGun = null;
+    private bool holdingGun;
+    private bool gunCanPickUp;
+    private int ammoCount;
+    private GameObject heldGun;
 
 
     void Awake()
@@ -33,15 +33,18 @@ public class Shooting : MonoBehaviour
             {
                 DropWeapon(heldGun);
             }
-            
+
             if (Input.GetKeyDown(KeyCode.R))
             {
-                ResetAmmoCount(ammoCount);
+                ammoCount = 17;
+                Debug.Log("Gun reloaded");
             }
         }
 
         if (Physics.Raycast(targetRay, out hit))
         {
+
+            //Only guns can be picked up if no gun is equipped
             if (hit.collider.tag == "Gun")
             {
                 gunCanPickUp = true;
@@ -56,35 +59,43 @@ public class Shooting : MonoBehaviour
                 gunCanPickUp = false;
             }
 
+
+            //If a gun is equipped, allow shooting actions
             if (holdingGun == true && Input.GetButtonDown("Fire1"))
             {
-                Debug.Log("Object Hit: " + hit.collider.gameObject.name);
-
-                if (hit.collider.tag != ("Target"))
+                // Do not fire gun if there is no ammo
+                if (ammoCount == 0)
                 {
-                    Instantiate(bulletDecal, hit.point, Quaternion.identity);
+                    return;
                 }
 
-                else if (hit.collider.tag == ("Target"))
+                // Update ammo count with each shot
+                ammoCount = ammoCount - 1;
+                Debug.Log("Ammo: " + ammoCount);
+
+                if (ammoCount != 0)
                 {
-                    StartCoroutine(TargetHitReset(hit.collider.gameObject));
-                    ++targetHitCounter;
-                    UpdateHitCounter();
+
+                    //Track what has been shot
+                    Debug.Log("Object Hit: " + hit.collider.gameObject.name);
+
+                    //Place bullet hole at area shot
+                    if (hit.collider.tag != ("Target"))
+                    {
+                        Instantiate(bulletDecal, hit.point, Quaternion.identity);
+                    }
+
+
+                    //If target is shot, update score, break target, and respawn target
+                    else if (hit.collider.tag == ("Target"))
+                    {
+                        StartCoroutine(TargetHitReset(hit.collider.gameObject));
+                        ++targetHitCounter;
+                        UpdateHitCounter();
+                    }
                 }
             }
         }
-    }
-
-    void UpdateAmmoCount(int ammo)
-    {
-        ammo -= ammo;
-        Debug.Log("Current Ammo: " + ammo);
-    }
-
-    void ResetAmmoCount(int ammo)
-    {
-        ammo = 17;
-        Debug.Log("Ammo Reloaded");
     }
 
     void PickUpWeapon(GameObject gun)
@@ -92,6 +103,7 @@ public class Shooting : MonoBehaviour
         Destroy(gun.GetComponent<Rigidbody>());
         gun.transform.SetParent(Camera.main.transform);
         holdingGun = true;
+        ammoCount = 17;
 
         //Position for original "detailed" model
         //gun.transform.localPosition = new Vector3(0.48f, -0.43f, 0.84f);
@@ -164,7 +176,15 @@ public class Shooting : MonoBehaviour
         guiFont.fontSize = 20;
         float xMin = (Screen.width / 2);
         float yMin = (Screen.height / 1.5f);
+        float yMax = (Screen.height / 1f);
+
         if (gunCanPickUp)
+        {
             GUI.Label(new Rect(xMin, yMin, 500, 200), "Press E to pick up gun", guiFont);
+        }
+        if (holdingGun)
+        {
+            GUI.Label(new Rect(0, yMax, 200, 200), "Ammo: " + ammoCount, guiFont);
+        }
     }
 }

@@ -5,12 +5,12 @@ public class FireGun : MonoBehaviour
 {
 
     private Animation anim;
+    public int currentAmmo;
 
     void Start()
     {
-
+        currentAmmo = 17;
         anim = GetComponent<Animation>();
-
     }
 
 
