@@ -8,12 +8,14 @@ public class Shooting : MonoBehaviour
     private GUIStyle guiFont = new GUIStyle();
     public GameObject bulletDecal;
     public Text targetHitText;
+    public GameObject bulletShell;
 
-    private int targetHitCounter = 0;
+    private int targetHitCounter;
     private bool holdingGun;
     private bool gunCanPickUp;
     private int ammoCount;
     private GameObject heldGun;
+    private Vector3 gunEjectChamber;
 
 
     void Awake()
@@ -37,6 +39,7 @@ public class Shooting : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.R))
             {
                 ammoCount = 17;
+
                 Debug.Log("Gun reloaded");
             }
         }
@@ -69,15 +72,20 @@ public class Shooting : MonoBehaviour
                     return;
                 }
 
-                // Update ammo count with each shot
-                ammoCount = ammoCount - 1;
-                Debug.Log("Ammo: " + ammoCount);
-
-                if (ammoCount != 0)
+                else if (ammoCount != 0)
                 {
+                    // Eject a bullet shell with each shot
+                    BulletEject(bulletShell);
+
+                    
+                    // Update ammo count with each shot
+                    ammoCount = ammoCount - 1;
+                    Debug.Log("Ammo: " + ammoCount);
+
 
                     //Track what has been shot
                     Debug.Log("Object Hit: " + hit.collider.gameObject.name);
+
 
                     //Place bullet hole at area shot
                     if (hit.collider.tag != ("Target"))
@@ -104,6 +112,7 @@ public class Shooting : MonoBehaviour
         gun.transform.SetParent(Camera.main.transform);
         holdingGun = true;
         ammoCount = 17;
+        heldGun = gun;
 
         //Position for original "detailed" model
         //gun.transform.localPosition = new Vector3(0.48f, -0.43f, 0.84f);
@@ -124,6 +133,15 @@ public class Shooting : MonoBehaviour
     void UpdateHitCounter()
     {
         targetHitText.text = "Targets Hit: " + targetHitCounter.ToString();
+    }
+
+    void BulletEject(GameObject bullet)
+    {
+        gunEjectChamber = Camera.main.transform.TransformPoint(1f, 1f, 1f) + new Vector3(0f, -1.5f, .5f);
+        GameObject bulletShell = Instantiate(bullet, gunEjectChamber, Quaternion.Euler(0f, 180f, 0f)) as GameObject;
+        bulletShell.AddComponent<Rigidbody>();
+        bulletShell.AddComponent<BulletholeDecay>();
+        bulletShell.GetComponent<Rigidbody>().AddForce(100.0f, 100.0f, 0f);
     }
 
     IEnumerator TargetHitReset(GameObject target)
