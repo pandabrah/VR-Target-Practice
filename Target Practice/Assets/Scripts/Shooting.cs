@@ -17,7 +17,6 @@ public class Shooting : MonoBehaviour
     private GameObject heldGun;
     private Vector3 gunEjectChamber;
 
-
     void Awake()
     {
         UpdateHitCounter();
@@ -54,6 +53,7 @@ public class Shooting : MonoBehaviour
                 if (holdingGun == false && Input.GetKeyDown(KeyCode.E))
                 {
                     PickUpWeapon(hit.collider.gameObject);
+                    heldGun = hit.collider.gameObject;
                 }
             }
 
@@ -75,7 +75,7 @@ public class Shooting : MonoBehaviour
                 else if (ammoCount != 0)
                 {
                     // Eject a bullet shell with each shot
-                    BulletEject(bulletShell);
+                    BulletEject(bulletShell, heldGun);
 
                     
                     // Update ammo count with each shot
@@ -112,7 +112,6 @@ public class Shooting : MonoBehaviour
         gun.transform.SetParent(Camera.main.transform);
         holdingGun = true;
         ammoCount = 17;
-        heldGun = gun;
 
         //Position for original "detailed" model
         //gun.transform.localPosition = new Vector3(0.48f, -0.43f, 0.84f);
@@ -135,18 +134,22 @@ public class Shooting : MonoBehaviour
         targetHitText.text = "Targets Hit: " + targetHitCounter.ToString();
     }
 
-    void BulletEject(GameObject bullet)
+    void BulletEject(GameObject bullet, GameObject gun)
     {
-        gunEjectChamber = Camera.main.transform.TransformPoint(1f, 1f, 1f) + new Vector3(0f, -1.5f, .5f);
+        float randVelocity = Random.Range(200.0f, 300.0f);
+
+        gunEjectChamber = gun.transform.TransformPoint(1.0f, 1.0f, 1.0f) + new Vector3(-1.0f, -1.0f, -0.7f);
         GameObject bulletShell = Instantiate(bullet, gunEjectChamber, Quaternion.Euler(0f, 180f, 0f)) as GameObject;
-        bulletShell.AddComponent<Rigidbody>();
         bulletShell.AddComponent<BulletholeDecay>();
-        bulletShell.GetComponent<Rigidbody>().AddForce(100.0f, 100.0f, 0f);
+
+        bulletShell.AddComponent<Rigidbody>();
+        bulletShell.GetComponent<Rigidbody>().AddRelativeForce(randVelocity, randVelocity, 0f);
+        bulletShell.GetComponent<Rigidbody>().AddRelativeTorque(10000.0f, 10000.0f, 10000.0f);
     }
 
     IEnumerator TargetHitReset(GameObject target)
     {
-        float duration = 10.0f;
+        float duration = 0.1f;
 
         if (target.name == ("TargetUp"))
         {
@@ -157,6 +160,7 @@ public class Shooting : MonoBehaviour
             {
                 Vector3 newPosition = Vector3.Lerp(startPosition, endPosition, i / duration);
                 target.transform.position = newPosition;
+                yield return null;
             }
 
             yield return new WaitForSeconds(2.0f);
@@ -165,6 +169,7 @@ public class Shooting : MonoBehaviour
             {
                 Vector3 newPosition = Vector3.Lerp(endPosition, startPosition, i / duration);
                 target.transform.position = newPosition;
+                yield return null;
             }
         }
 
@@ -177,6 +182,7 @@ public class Shooting : MonoBehaviour
             {
                 Vector3 newPosition = Vector3.Lerp(startPosition, endPosition, i / duration);
                 target.transform.position = newPosition;
+                yield return null;
             }
 
             yield return new WaitForSeconds(2.0f);
@@ -185,6 +191,7 @@ public class Shooting : MonoBehaviour
             {
                 Vector3 newPosition = Vector3.Lerp(endPosition, startPosition, i / duration);
                 target.transform.position = newPosition;
+                yield return null;
             }
         }
     }

@@ -41,7 +41,6 @@ public class FirstPersonController : MonoBehaviour {
         // Character Movement
         float forwardSpeed = Input.GetAxis("Vertical") * movementSpeed;
         float sideSpeed = Input.GetAxis("Horizontal") * movementSpeed;
-        //float upSpeed = Input.GetAxis("Jump") * jumpForce;
 
         verticalVelocity += Physics.gravity.y * Time.deltaTime;
 
