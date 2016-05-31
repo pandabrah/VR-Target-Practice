@@ -13,9 +13,10 @@ public class Shooting : MonoBehaviour
     private int targetHitCounter;
     private bool holdingGun;
     private bool gunCanPickUp;
-    private int ammoCount;
+    private static int ammoCount;
     private GameObject heldGun;
     private Vector3 gunEjectChamber;
+    private Animation anim;
 
     void Awake()
     {
@@ -77,7 +78,10 @@ public class Shooting : MonoBehaviour
                     // Eject a bullet shell with each shot
                     BulletEject(bulletShell, heldGun);
 
-                    
+                    // Play the gun's fire animation
+                    anim = heldGun.GetComponent<Animation>();
+                    anim.Play("Shooting");
+
                     // Update ammo count with each shot
                     ammoCount = ammoCount - 1;
                     Debug.Log("Ammo: " + ammoCount);
