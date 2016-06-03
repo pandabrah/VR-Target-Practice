@@ -6,9 +6,11 @@ public class Shooting : MonoBehaviour
 {
 
     private GUIStyle guiFont = new GUIStyle();
+
     public GameObject bulletDecal;
     public Text targetHitText;
     public GameObject bulletShell;
+    public GameObject targets;
 
     private int targetHitCounter;
     private bool holdingGun;
@@ -21,6 +23,13 @@ public class Shooting : MonoBehaviour
     void Awake()
     {
         UpdateHitCounter();
+    }
+
+    void Start()
+    {
+        Animation setAnim = targets.GetComponent<Animation>();
+        setAnim.playAutomatically = false;
+        
     }
 
     void FixedUpdate()
@@ -102,6 +111,7 @@ public class Shooting : MonoBehaviour
                     else if (hit.collider.tag == ("Target"))
                     {
                         StartCoroutine(TargetHitReset(hit.collider.gameObject));
+                        
                         ++targetHitCounter;
                         UpdateHitCounter();
                     }
@@ -153,51 +163,32 @@ public class Shooting : MonoBehaviour
 
     IEnumerator TargetHitReset(GameObject target)
     {
-        float duration = 0.1f;
+        float duration = .280f;
+        Vector3 targetPosition = target.transform.position;
 
-        if (target.name == ("TargetUp"))
-        {
-            Vector3 startPosition = target.transform.position;
-            Vector3 endPosition = new Vector3(target.transform.position.x, 0.4446654f, target.transform.position.z);
+        Animation targetBreakAnim = target.GetComponent<Animation>();
+        targetBreakAnim.Play("TargetBreak");
 
-            for (float i = 0; i < duration; i += Time.deltaTime)
-            {
-                Vector3 newPosition = Vector3.Lerp(startPosition, endPosition, i / duration);
-                target.transform.position = newPosition;
-                yield return null;
-            }
+        yield return new WaitForSeconds(duration);
 
-            yield return new WaitForSeconds(2.0f);
+        DestroyObject(target);
 
-            for (float i = 0; i < duration; i += Time.deltaTime)
-            {
-                Vector3 newPosition = Vector3.Lerp(endPosition, startPosition, i / duration);
-                target.transform.position = newPosition;
-                yield return null;
-            }
-        }
+        yield return new WaitForSeconds(3);
 
-        else if (target.name == ("TargetSide"))
-        {
-            Vector3 startPosition = target.transform.position;
-            Vector3 endPosition = new Vector3(-6.398f, target.transform.position.y, target.transform.position.z);
+        SpawnTarget(targets, targetPosition);
 
-            for (float i = 0; i < duration; i += Time.deltaTime)
-            {
-                Vector3 newPosition = Vector3.Lerp(startPosition, endPosition, i / duration);
-                target.transform.position = newPosition;
-                yield return null;
-            }
+        yield return null;
+    }
 
-            yield return new WaitForSeconds(2.0f);
+    void SpawnTarget(GameObject target, Vector3 spawnLocation)
+    {
+        GameObject newTarget = (GameObject)Instantiate(targets, spawnLocation, Quaternion.identity);
 
-            for (float i = 0; i < duration; i += Time.deltaTime)
-            {
-                Vector3 newPosition = Vector3.Lerp(endPosition, startPosition, i / duration);
-                target.transform.position = newPosition;
-                yield return null;
-            }
-        }
+        newTarget.tag = ("Target");
+        newTarget.AddComponent<BoxCollider>();
+        BoxCollider targetHitBox = newTarget.GetComponent<BoxCollider>();
+        targetHitBox.center = new Vector3(0f, 0f, -0.17f);
+        targetHitBox.size = new Vector3(1f, 1f, 0.1f);
     }
 
     void OnGUI()
