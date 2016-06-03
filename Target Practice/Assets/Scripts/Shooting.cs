@@ -48,7 +48,6 @@ public class Shooting : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.R))
             {
                 ammoCount = 17;
-
                 Debug.Log("Gun reloaded");
             }
         }
@@ -122,10 +121,24 @@ public class Shooting : MonoBehaviour
 
     void PickUpWeapon(GameObject gun)
     {
+        //Remove the collider and rigidbody of the gun
         Destroy(gun.GetComponent<Rigidbody>());
+        Destroy(gun.GetComponent<BoxCollider>());
+
+        //Attach gun to camera point
         gun.transform.SetParent(Camera.main.transform);
         holdingGun = true;
-        ammoCount = 17;
+
+        //Set ammo of gun
+        if (gun.name == "Glock18_Simple")
+        {
+            ammoCount = 17;
+        }
+
+        if (gun.name == "HK45")
+        {
+            ammoCount = 10;
+        }
 
         //Position for original "detailed" model
         //gun.transform.localPosition = new Vector3(0.48f, -0.43f, 0.84f);
@@ -139,6 +152,10 @@ public class Shooting : MonoBehaviour
     void DropWeapon(GameObject gun)
     {
         gun.AddComponent<Rigidbody>();
+        BoxCollider gunCollider = gun.AddComponent<BoxCollider>();
+        gunCollider.size = new Vector3(0.1f, 0.49f, 0.88f);
+        gunCollider.center = new Vector3(0f, 0.01f, -0.05f); 
+
         Camera.main.transform.DetachChildren();
         holdingGun = false;
     }
