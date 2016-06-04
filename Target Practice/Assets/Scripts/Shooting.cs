@@ -29,7 +29,6 @@ public class Shooting : MonoBehaviour
     {
         Animation setAnim = targets.GetComponent<Animation>();
         setAnim.playAutomatically = false;
-        
     }
 
     void FixedUpdate()
