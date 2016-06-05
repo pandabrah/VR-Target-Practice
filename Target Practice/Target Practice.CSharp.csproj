@@ -70,9 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\BulletholeDecay.cs" />
-    <Compile Include="Assets\Scripts\FirstPersonController.cs" />
-    <Compile Include="Assets\Scripts\Shooting.cs" />
-    <Compile Include="Assets\Scripts\SteamVR_FirstPersonController.cs" />
+    <Compile Include="Assets\Scripts\Example Scripts\SteamVR_FirstPersonController.cs" />
+    <Compile Include="Assets\Scripts\NonVRVersion\FirstPersonController.cs" />
+    <Compile Include="Assets\Scripts\NonVRVersion\Shooting.cs" />
     <Compile Include="Assets\Scripts\VRControls.cs" />
     <Compile Include="Assets\Scripts\VRShooting.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_GazeTracker.cs" />
