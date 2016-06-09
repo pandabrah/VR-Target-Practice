@@ -73,8 +73,11 @@
     <Compile Include="Assets\Scripts\Example Scripts\SteamVR_FirstPersonController.cs" />
     <Compile Include="Assets\Scripts\NonVRVersion\FirstPersonController.cs" />
     <Compile Include="Assets\Scripts\NonVRVersion\Shooting.cs" />
+    <Compile Include="Assets\Scripts\StartGameSwitch.cs" />
     <Compile Include="Assets\Scripts\TargetHitCounter.cs" />
     <Compile Include="Assets\Scripts\TargetInteraction.cs" />
+    <Compile Include="Assets\Scripts\TargetSpawner.cs" />
+    <Compile Include="Assets\Scripts\Timer.cs" />
     <Compile Include="Assets\Scripts\VRControls.cs" />
     <Compile Include="Assets\Scripts\VRShooting.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_GazeTracker.cs" />
