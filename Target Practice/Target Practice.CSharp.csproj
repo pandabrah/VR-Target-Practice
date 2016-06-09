@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\BulletholeDecay.cs" />
     <Compile Include="Assets\Scripts\Example Scripts\SteamVR_FirstPersonController.cs" />
+    <Compile Include="Assets\Scripts\GamePlaying.cs" />
     <Compile Include="Assets\Scripts\NonVRVersion\FirstPersonController.cs" />
     <Compile Include="Assets\Scripts\NonVRVersion\Shooting.cs" />
     <Compile Include="Assets\Scripts\StartGameSwitch.cs" />
