@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ac31a0ff88128f646bc572824a64d8e4
+timeCreated: 1465368715
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - bulletDecal: {fileID: 178936, guid: 36ccd2692713acd44b033944c1b849eb, type: 2}
+  - targets: {fileID: 100032, guid: c51c3f09676599c43b949e7716e53bae, type: 3}
+  - menu: {fileID: 166852, guid: 5cd05ee218b55174d93be97b6288fc47, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
