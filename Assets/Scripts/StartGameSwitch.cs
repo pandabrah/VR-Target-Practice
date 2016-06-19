@@ -7,11 +7,13 @@ public class StartGameSwitch : MonoBehaviour {
     public GameObject countdown;
     public AudioClip beepSound;
 
+    private float timerDuration;
     private AudioSource source;
 
     void Awake()
     {
         source = GetComponent<AudioSource>();
+        
     }
 
     void Update()
