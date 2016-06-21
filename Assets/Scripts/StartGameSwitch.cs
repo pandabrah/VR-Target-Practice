@@ -3,17 +3,20 @@ using System.Collections;
 
 public class StartGameSwitch : MonoBehaviour {
 
-    public GameObject startButton;
     public GameObject countdown;
     public AudioClip beepSound;
 
+    private GameObject startButton;
     private float timerDuration;
     private AudioSource source;
 
-    void Awake()
+    private StartGameSwitch startGameScript;
+
+    void Start()
     {
         source = GetComponent<AudioSource>();
-        
+        startButton = gameObject.transform.Find("Start Button").gameObject;
+        startGameScript = this.GetComponent<StartGameSwitch>();
     }
 
     void Update()
@@ -21,7 +24,7 @@ public class StartGameSwitch : MonoBehaviour {
         if (startButton == null)
         {
             StartCoroutine(StartCountdown());
-            this.GetComponent<StartGameSwitch>().enabled = false;
+            startGameScript.enabled = false;
         }
 
         else
@@ -31,7 +34,7 @@ public class StartGameSwitch : MonoBehaviour {
     IEnumerator StartCountdown()
     {
         int i;
-        var cText = countdown.GetComponent<TextMesh>(); 
+        var cText = countdown.GetComponent<TextMesh>();
 
         yield return new WaitForSeconds(1f);
         countdown.SetActive(true);
