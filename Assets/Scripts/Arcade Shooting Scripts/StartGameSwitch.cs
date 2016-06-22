@@ -15,12 +15,14 @@ public class StartGameSwitch : MonoBehaviour {
     void Start()
     {
         source = GetComponent<AudioSource>();
-        startButton = gameObject.transform.Find("Start Button").gameObject;
         startGameScript = this.GetComponent<StartGameSwitch>();
+        startButton = transform.Find("Start Button").gameObject;
     }
 
     void Update()
     {
+
+        Debug.Log(startButton);
         if (startButton == null)
         {
             StartCoroutine(StartCountdown());
