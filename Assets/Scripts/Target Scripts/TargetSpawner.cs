@@ -22,20 +22,6 @@ public class TargetSpawner : MonoBehaviour {
         CreateSpawnPoints();
     }
 
-    //void OnDrawGizmos()
-    //{
-    //    if (newSpawnPoints == null)
-    //    {
-    //        return;
-    //    }
-
-    //    Gizmos.color = Color.black;
-    //    for (int i = 0; i < newSpawnPoints.Length; i++)
-    //    {
-    //        Gizmos.DrawSphere(transform.TransformPoint(newSpawnPoints[i]), 0.1f);
-    //    }
-    //}
-
     void Update()
     {
         Spawn();
@@ -56,23 +42,59 @@ public class TargetSpawner : MonoBehaviour {
     void Spawn()
     {
         spawnPointIndex = Random.Range(0, spawnPoints.Length);
+        bool validPoint = checkValidPoints(spawnPointIndex, lastIndex);
 
-        if (spawnPointIndex == lastIndex)
+        if (!validPoint)
         {
             return;
         }
 
-        else if (spawnPointIndex != lastIndex)
+        else if (validPoint)
         {
             if (currentTargetCount != maxTargetCount)
             {
                 CreateTargetObject(spawnPointIndex);
 
                 currentTargetCount += 1;
+
+                lastIndex = spawnPointIndex;
             }
 
             else
                 return;
+        }
+    }
+
+    bool checkValidPoints(int current, int last)
+    {
+        //Check left, right, and center
+        if (current == last || current == (last - 1) || current == (last + 1))
+        {
+            return false;
+        }
+
+        //Check top and bottom
+        else if (current == (last - xSize + 1) || current == (last + xSize + 1))
+        {
+            return false;
+        }
+        
+        //Check bottom left and bottom right
+        else if (current == (last - xSize) || current == (last - xSize + 2))
+        {
+            return false;
+        }
+
+        //Check top left and top right
+        else if (current == (last + xSize + 1) || current == (last + xSize + 2))
+        {
+            return false;
+        }
+
+        //Return true if there is no target spawned on or around planned point
+        else
+        {
+            return true;
         }
     }
 
