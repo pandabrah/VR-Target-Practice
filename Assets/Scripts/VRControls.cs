@@ -177,24 +177,6 @@ public class VRControls : MonoBehaviour
 
         Quaternion gunRotation = gun.transform.rotation;
 
-        //Check if there is a scoreboard and timer object attached to gun
-        if (gun.transform.Find("Scoreboard").gameObject != null && gun.transform.Find("Timer").gameObject != null)
-        {
-
-            //If the left side of the gun is rotated towards the user, show the scoreboard and timer
-            if (gunRotation.eulerAngles.y >= 260 && gunRotation.eulerAngles.y <= 300)
-            {
-                gun.transform.Find("Scoreboard").gameObject.SetActive(true);
-                gun.transform.Find("Timer").gameObject.SetActive(true);
-            }
-
-            else
-            {
-                gun.transform.Find("Scoreboard").gameObject.SetActive(false);
-                gun.transform.Find("Timer").gameObject.SetActive(false);
-            }
-        }
-
         //Gun firing interactions
         if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
         {
@@ -219,7 +201,7 @@ public class VRControls : MonoBehaviour
                 //If target is the start button, do not add to hit counter
                 else if (hit.collider.tag == ("Target") && hit.collider.name == ("Start Button"))
                 {
-                    StartCoroutine(hit.collider.gameObject.GetComponent<TargetInteraction>().TargetHitReset());
+                    StartCoroutine(hit.collider.gameObject.GetComponent<TargetInteraction>().StartButtonInteraction());
                 }
 
                 //If target is shot, update score, break target, and respawn target
@@ -234,6 +216,24 @@ public class VRControls : MonoBehaviour
             if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger))
             {
                 return;
+            }
+        }
+
+        //Check if there is a scoreboard and timer object attached to gun
+        if (gun.transform.Find("Scoreboard").gameObject != null && gun.transform.Find("Timer").gameObject != null)
+        {
+
+            //If the left side of the gun is rotated towards the user, show the scoreboard and timer
+            if (gunRotation.eulerAngles.y >= 260 && gunRotation.eulerAngles.y <= 300)
+            {
+                gun.transform.Find("Scoreboard").gameObject.SetActive(true);
+                gun.transform.Find("Timer").gameObject.SetActive(true);
+            }
+
+            else
+            {
+                gun.transform.Find("Scoreboard").gameObject.SetActive(false);
+                gun.transform.Find("Timer").gameObject.SetActive(false);
             }
         }
     }

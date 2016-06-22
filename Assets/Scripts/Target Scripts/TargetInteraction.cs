@@ -28,6 +28,19 @@ public class TargetInteraction : MonoBehaviour {
     //    yield return null;
     }
 
+
+    public IEnumerator StartButtonInteraction()
+    {
+        float duration = .280f;
+        //Vector3 targetPosition = transform.position;
+
+        Animation targetBreakAnim = GetComponent<Animation>();
+        targetBreakAnim.Play("TargetBreak");
+
+        yield return new WaitForSeconds(duration);
+
+        targets.gameObject.SetActive(false);
+    }
     //public void SpawnTarget(GameObject target, Vector3 spawnLocation)
     //{
     //    GameObject newTarget = (GameObject)Instantiate(targets, spawnLocation, Quaternion.identity);

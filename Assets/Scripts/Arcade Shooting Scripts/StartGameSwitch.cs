@@ -22,8 +22,8 @@ public class StartGameSwitch : MonoBehaviour {
     void Update()
     {
 
-        Debug.Log(startButton);
-        if (startButton == null)
+        //Debug.Log(startButton);
+        if (startButton.activeSelf == false)
         {
             StartCoroutine(StartCountdown());
             startGameScript.enabled = false;
@@ -35,7 +35,6 @@ public class StartGameSwitch : MonoBehaviour {
 
     IEnumerator StartCountdown()
     {
-        int i;
         var cText = countdown.GetComponent<TextMesh>();
 
         yield return new WaitForSeconds(1f);
@@ -44,7 +43,7 @@ public class StartGameSwitch : MonoBehaviour {
         cText.text = ("Shoot as many targets\n as you can\n in thirty seconds");
         yield return new WaitForSeconds(5f);
 
-        for (i = 3; i > 0; i--)
+        for (int i = 3; i > 0; i--)
         {
             cText.text = ("Game Starts in " + i);
             source.PlayOneShot(beepSound, 1f);
