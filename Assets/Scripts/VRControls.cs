@@ -6,12 +6,9 @@ public class VRControls : MonoBehaviour
 {
     public GameObject bulletDecal;
     public GameObject targets;
-    //public TargetInteraction targetScript;
     public GameObject menu;
 
     public float velocityMult = 3;
-
-    public AudioClip gunShotSound;
 
     private bool objectDetect;
     private bool holdingGun;
@@ -19,18 +16,16 @@ public class VRControls : MonoBehaviour
     private GameObject detectedObj;
 
     private SteamVR_TrackedObject trackedController;
-    private SteamVR_Controller.Device device;
+    public static SteamVR_Controller.Device device;
+
     private Rigidbody attachPoint;
     private Rigidbody menuAttachPoint;
 
     private FixedJoint attachJoint;
     private FixedJoint menuJoint;
-    private Animation anim;
 
     private bool menuOn = false;
     private GameObject newMenu;
-
-    private AudioSource source;
 
     void Awake()
     {
@@ -93,7 +88,7 @@ public class VRControls : MonoBehaviour
     {
         if (holdingGun)
         {
-            shootGun(gunInHand);
+            gunInHand.GetComponent<VRShooting>().enabled = true;
         }
     }
 
@@ -131,7 +126,7 @@ public class VRControls : MonoBehaviour
 
     IEnumerator GrabGun(GameObject obj)
     {
-        yield return new WaitForFixedUpdate();
+        yield return new WaitForEndOfFrame();
         if (attachJoint == null && device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
         {
             obj.transform.position = attachPoint.transform.position + new Vector3(0.03f, 0f, 0.05f);
@@ -168,76 +163,10 @@ public class VRControls : MonoBehaviour
 
             objRB.maxAngularVelocity = objRB.angularVelocity.magnitude * velocityMult;
 
+            gunInHand.GetComponent<VRShooting>().enabled = false;
+
             holdingGun = false;
             gunInHand = null;
-        }
-    }
-
-    void shootGun(GameObject gun)
-    {
-        Ray targetRay = new Ray(gun.transform.Find("Aim").position, gun.transform.Find("Aim").forward);
-        RaycastHit hit;
-
-        Quaternion gunRotation = gun.transform.rotation;
-
-        //Gun firing interactions
-        if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
-        {
-            source = gun.GetComponent<AudioSource>();
-            source.PlayOneShot(gunShotSound, 1f);
-
-
-            //Check if gun has animation, if it does play it every trigger pull
-            if (gun.GetComponent<Animation>())
-            {
-                Animation anim = gun.GetComponent<Animation>();
-                anim.Play("Shooting");
-            }
-
-            if (Physics.Raycast(targetRay, out hit))
-            {
-                if (hit.collider.tag != ("Target"))
-                {
-                    Instantiate(bulletDecal, hit.point, Quaternion.identity);
-                }
-
-                //If target is the start button, do not add to hit counter
-                else if (hit.collider.tag == ("Target") && hit.collider.name == ("Start Button"))
-                {
-                    StartCoroutine(hit.collider.gameObject.GetComponent<TargetInteraction>().StartButtonInteraction());
-                }
-
-                //If target is shot, update score, break target, and respawn target
-                else if (hit.collider.tag == ("Target"))
-                {
-                    StartCoroutine(hit.collider.gameObject.GetComponent<TargetInteraction>().TargetHitReset());
-                    TargetHitCounter.targetHitCount += 1;
-                }
-            }
-
-            //Confirm trigger is released before allowing another shot
-            if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger))
-            {
-                return;
-            }
-        }
-
-        //Check if there is a scoreboard and timer object attached to gun
-        if (gun.transform.Find("Scoreboard").gameObject != null && gun.transform.Find("Timer").gameObject != null)
-        {
-
-            //If the left side of the gun is rotated towards the user, show the scoreboard and timer
-            if (gunRotation.eulerAngles.y >= 260 && gunRotation.eulerAngles.y <= 300)
-            {
-                gun.transform.Find("Scoreboard").gameObject.SetActive(true);
-                gun.transform.Find("Timer").gameObject.SetActive(true);
-            }
-
-            else
-            {
-                gun.transform.Find("Scoreboard").gameObject.SetActive(false);
-                gun.transform.Find("Timer").gameObject.SetActive(false);
-            }
         }
     }
 

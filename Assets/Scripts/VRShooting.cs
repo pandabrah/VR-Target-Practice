@@ -8,65 +8,94 @@ public class VRShooting : MonoBehaviour
 
     public static int ammoCount;
 
-    private GameObject gun;
+    public AudioClip gunShotSound;
+
     private int ammo;
-    private int targetHitCounter;
-    private bool holdingGun;
-    private bool gunCanPickUp;
     private Vector3 gunEjectChamber;
 
     private Animation anim;
 
+    private AudioSource source;
+
+    private SteamVR_Controller.Device controller;
+
     void Start()
     {
         InitGun();
+        controller = VRControls.device;
     }
 
     void InitGun()
     {
-        gun = this.gameObject;
         ammo = ammoCount;
     }
 
     void FixedUpdate()
     {
-        Ray targetRay = new Ray(gun.transform.Find("Aim").position, gun.transform.Find("Aim").forward);
+        Ray targetRay = new Ray(transform.Find("Aim").position, transform.Find("Aim").forward);
         RaycastHit hit;
 
-        //if (Physics.Raycast(targetRay, out hit))
-        //{
-        //    if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
-        //    {
-        //        if (gun.GetComponent<Animation>())
-        //        {
-        //            Animation anim = gun.GetComponent<Animation>();
-        //            anim.Play("Shooting");
-        //        }
+        Quaternion gunRotation = transform.rotation;
 
-        //        if (Physics.Raycast(targetRay, out hit))
-        //        {
-        //            if (hit.collider.tag != ("Target"))
-        //            {
-        //                Instantiate(bulletDecal, hit.point, Quaternion.identity);
-        //            }
+        if (controller.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
+        {
+            source = GetComponent<AudioSource>();
+            source.PlayOneShot(gunShotSound, 1f);
 
 
-        //            //If target is shot, update score, break target, and respawn target
-        //            else if (hit.collider.tag == ("Target"))
-        //            {
-        //                StartCoroutine(TargetHitReset(hit.collider.gameObject));
-        //            }
-        //        }
-        //    }
-        //    else
-        //        return;
-        //}
+            //Check if gun has animation, if it does play it every trigger pull
+            if (GetComponent<Animation>())
+            {
+                Animation anim = GetComponent<Animation>();
+                anim.Play("Shooting");
+            }
+
+            if (Physics.Raycast(targetRay, out hit))
+            {
+                if (hit.collider.tag != ("Target"))
+                {
+                    Instantiate(bulletDecal, hit.point, Quaternion.identity);
+                }
+
+                //If target is the start button, do not add to hit counter
+                else if (hit.collider.tag == ("Target") && hit.collider.name == ("Start Button"))
+                {
+                    StartCoroutine(hit.collider.gameObject.GetComponent<TargetInteraction>().StartButtonInteraction());
+                }
+
+                //If target is shot, update score, break target, and respawn target
+                else if (hit.collider.tag == ("Target"))
+                {
+                    StartCoroutine(hit.collider.gameObject.GetComponent<TargetInteraction>().TargetHitReset());
+                    TargetHitCounter.targetHitCount += 1;
+                }
+            }
+
+            //Confirm trigger is released before allowing another shot
+            if (controller.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger))
+            {
+                return;
+            }
+        }
+
+        //Check if there is a scoreboard and timer object attached to gun
+        if (transform.Find("Scoreboard").gameObject != null && transform.Find("Timer").gameObject != null)
+        {
+
+            //If the left side of the gun is rotated towards the user, show the scoreboard and timer
+            if (gunRotation.eulerAngles.y >= 260 && gunRotation.eulerAngles.y <= 300)
+            {
+                transform.Find("Scoreboard").gameObject.SetActive(true);
+                transform.Find("Timer").gameObject.SetActive(true);
+            }
+
+            else
+            {
+                transform.Find("Scoreboard").gameObject.SetActive(false);
+                transform.Find("Timer").gameObject.SetActive(false);
+            }
+        }
     }
-
-    //void UpdateHitCounter()
-    //{
-    //    targetHitText.text = "Targets Hit: " + targetHitCounter.ToString();
-    //}
 
     //void BulletEject(GameObject bullet, GameObject gun)
     //{

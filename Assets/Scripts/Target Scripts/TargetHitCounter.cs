@@ -4,12 +4,11 @@ using System.Collections;
 public class TargetHitCounter : MonoBehaviour {
 
     TextMesh targetCountText;
-    public static int targetHitCount;
+    public static int targetHitCount = 0;
 
     void Awake()
     {
         targetCountText = transform.Find("Score").GetComponent<TextMesh>();
-        targetHitCount = 0;
     }
 
     void Update()
