@@ -30,7 +30,7 @@ public class VRShooting : MonoBehaviour
         ammo = ammoCount;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         Ray targetRay = new Ray(transform.Find("Aim").position, transform.Find("Aim").forward);
         RaycastHit hit;

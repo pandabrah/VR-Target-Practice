@@ -4,7 +4,6 @@ using System.Collections;
 [RequireComponent(typeof(SteamVR_TrackedObject))]
 public class VRControls : MonoBehaviour
 {
-    public GameObject bulletDecal;
     public GameObject targets;
     public GameObject menu;
 
@@ -136,11 +135,6 @@ public class VRControls : MonoBehaviour
 
             gunInHand = obj.gameObject;
             holdingGun = true;
-
-            if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger))
-            {
-                yield return null;
-            }
         }
 
         else if (attachJoint != null && device.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
@@ -153,19 +147,19 @@ public class VRControls : MonoBehaviour
             if (origin != null)
             {
                 objRB.velocity = origin.TransformVector(device.velocity) * velocityMult;
-                objRB.angularVelocity = origin.TransformVector(device.angularVelocity) * velocityMult/3;
+                objRB.angularVelocity = origin.TransformVector(device.angularVelocity) * velocityMult;
             }
             else
             {
                 objRB.velocity = device.velocity * velocityMult;
-                objRB.angularVelocity = device.angularVelocity * velocityMult/3;
+                objRB.angularVelocity = device.angularVelocity * velocityMult;
             }
 
             objRB.maxAngularVelocity = objRB.angularVelocity.magnitude * velocityMult;
 
-            gunInHand.GetComponent<VRShooting>().enabled = false;
-
             holdingGun = false;
+
+            gunInHand.GetComponent<VRShooting>().enabled = false;
             gunInHand = null;
         }
     }

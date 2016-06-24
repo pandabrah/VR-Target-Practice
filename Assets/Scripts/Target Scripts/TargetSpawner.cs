@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TargetSpawner : MonoBehaviour {
+public class TargetSpawner : MonoBehaviour
+{
 
     public int maxTargetCount = 6;
     public GameObject target;
@@ -22,6 +23,11 @@ public class TargetSpawner : MonoBehaviour {
         CreateSpawnPoints();
     }
 
+    void OnEnable()
+    {
+        InitialSpawn();
+    }
+
     void Update()
     {
         Spawn();
@@ -39,6 +45,32 @@ public class TargetSpawner : MonoBehaviour {
         }
     }
 
+    void InitialSpawn()
+    {
+        while (currentTargetCount != maxTargetCount)
+        {
+            spawnPointIndex = Random.Range(0, spawnPoints.Length);
+            bool validPoint = checkValidPoints(spawnPointIndex, lastIndex);
+
+            if (!validPoint)
+            {
+                return;
+            }
+
+            else if (validPoint)
+            {
+                CreateTargetObject(spawnPointIndex);
+
+                currentTargetCount += 1;
+
+                lastIndex = spawnPointIndex;
+            }
+
+            else
+                return;
+        }
+    }
+
     void Spawn()
     {
         spawnPointIndex = Random.Range(0, spawnPoints.Length);
@@ -53,7 +85,7 @@ public class TargetSpawner : MonoBehaviour {
         {
             if (currentTargetCount != maxTargetCount)
             {
-                CreateTargetObject(spawnPointIndex);
+                StartCoroutine(SpawnSingleTarget());
 
                 currentTargetCount += 1;
 
@@ -63,6 +95,12 @@ public class TargetSpawner : MonoBehaviour {
             else
                 return;
         }
+    }
+
+    IEnumerator SpawnSingleTarget()
+    {
+        yield return new WaitForSeconds(Random.Range(1,2));
+        CreateTargetObject(spawnPointIndex);
     }
 
     bool checkValidPoints(int current, int last)
@@ -78,7 +116,7 @@ public class TargetSpawner : MonoBehaviour {
         {
             return false;
         }
-        
+
         //Check bottom left and bottom right
         else if (current == (last - xSize) || current == (last - xSize + 2))
         {
