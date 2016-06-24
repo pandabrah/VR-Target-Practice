@@ -20,7 +20,6 @@ public class GamePlaying : MonoBehaviour {
 
         startGameScript = this.GetComponent<StartGameSwitch>();
         gamePlayingScript = this.GetComponent<GamePlaying>();
-
     }
 
     void OnEnable()
@@ -42,15 +41,9 @@ public class GamePlaying : MonoBehaviour {
             updatedTime = 0;
             timer.GetComponent<TextMesh>().text = ("Time Left: 0");
 
-
-
             Animation anim = this.transform.Find("Start Button").gameObject.GetComponent<Animation>();
             anim["TargetBreak"].time = 0;
             this.transform.Find("Start Button").gameObject.SetActive(true);
-
-            //GameObject go = (GameObject)Instantiate(startButton, startButtonSpawn, startButtonRotation);
-            //go.transform.parent = gameObject.transform;
-            //go.transform.name = ("Start Button");
 
             this.transform.Find("SpawnZone").gameObject.SetActive(false);
             startGameScript.enabled = true;

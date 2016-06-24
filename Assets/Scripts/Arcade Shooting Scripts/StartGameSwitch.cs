@@ -26,6 +26,9 @@ public class StartGameSwitch : MonoBehaviour {
         if (startButton.activeSelf == false)
         {
             StartCoroutine(StartCountdown());
+
+            TargetHitCounter.targetHitCount = 0;
+
             startGameScript.enabled = false;
         }
 

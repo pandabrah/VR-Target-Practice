@@ -82,16 +82,19 @@ public class VRControls : MonoBehaviour
             }
         }
 
-        if (holdingGun)
-        {
-            shootGun(gunInHand);
-        }
-
         if (device.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
         {
             SystemMenu(menu);
         }
 
+    }
+
+    void Update()
+    {
+        if (holdingGun)
+        {
+            shootGun(gunInHand);
+        }
     }
 
     void GrabObject(GameObject obj)
@@ -155,12 +158,12 @@ public class VRControls : MonoBehaviour
             if (origin != null)
             {
                 objRB.velocity = origin.TransformVector(device.velocity) * velocityMult;
-                objRB.angularVelocity = origin.TransformVector(device.angularVelocity) * velocityMult;
+                objRB.angularVelocity = origin.TransformVector(device.angularVelocity) * velocityMult/3;
             }
             else
             {
                 objRB.velocity = device.velocity * velocityMult;
-                objRB.angularVelocity = device.angularVelocity * velocityMult;
+                objRB.angularVelocity = device.angularVelocity * velocityMult/3;
             }
 
             objRB.maxAngularVelocity = objRB.angularVelocity.magnitude * velocityMult;
