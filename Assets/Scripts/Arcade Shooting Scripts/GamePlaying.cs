@@ -11,13 +11,16 @@ public class GamePlaying : MonoBehaviour {
     public float updatedTime;
     private StartGameSwitch startGameScript;
     private GamePlaying gamePlayingScript;
+    private TargetSpawner targetSpawnerScript;
 
     private List<GameObject> listOfTargets;
+    private GameObject tg;
 
     void Start()
     {
         startGameScript = this.GetComponent<StartGameSwitch>();
         gamePlayingScript = this.GetComponent<GamePlaying>();
+        targetSpawnerScript = this.transform.Find("SpawnZone").gameObject.GetComponent<TargetSpawner>();
     }
 
     void OnEnable()
@@ -41,9 +44,8 @@ public class GamePlaying : MonoBehaviour {
 
             this.transform.Find("Start Button").gameObject.SetActive(true);
 
-            listOfTargets = this.transform.Find("SpawnZone").gameObject.GetComponent<TargetSpawner>().spawnedTargets;
-            listOfTargets.Find(<GameObject>);
-            ClearTargets(tgt)
+            listOfTargets = targetSpawnerScript.spawnedTargets;
+            ClearTargets();
 
             this.transform.Find("SpawnZone").gameObject.SetActive(false);
             startGameScript.enabled = true;
@@ -51,13 +53,11 @@ public class GamePlaying : MonoBehaviour {
         }
     }
 
-    void ClearTargets(GameObject t)
+    void ClearTargets()
     {
-        foreach (GameObject tgt in spawnedTargets)
-        {
-            Destroy(t);
-        }
+        foreach (GameObject tgt in listOfTargets)
+            Destroy(tgt);
 
-        spawnedTargets.RemoveAll((tgt) => tgt == null);
+        listOfTargets.RemoveAll((tgt) => tgt == null);
     }
 }

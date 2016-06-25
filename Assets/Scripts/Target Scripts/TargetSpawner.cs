@@ -17,7 +17,7 @@ public class TargetSpawner : MonoBehaviour
     private Vector3[] spawnPoints;
     private int spawnPointIndex;
     private int lastIndex = 0;
-    private GameObject tgt;
+    public GameObject tgt;
 
     void Awake()
     {
