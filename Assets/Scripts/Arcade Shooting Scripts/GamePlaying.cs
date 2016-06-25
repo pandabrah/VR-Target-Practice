@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GamePlaying : MonoBehaviour {
 
@@ -8,16 +9,13 @@ public class GamePlaying : MonoBehaviour {
     public float initialTime = 60f;
 
     public float updatedTime;
-    private Vector3 startButtonSpawn;
-    private Quaternion startButtonRotation;
     private StartGameSwitch startGameScript;
     private GamePlaying gamePlayingScript;
 
+    private List<GameObject> listOfTargets;
+
     void Start()
     {
-        startButtonSpawn = new Vector3(-1.1f, 1.69f, -3.82f);
-        startButtonRotation = Quaternion.Euler(0f, 0f, 0f);
-
         startGameScript = this.GetComponent<StartGameSwitch>();
         gamePlayingScript = this.GetComponent<GamePlaying>();
     }
@@ -41,13 +39,25 @@ public class GamePlaying : MonoBehaviour {
             updatedTime = 0;
             timer.GetComponent<TextMesh>().text = ("Time Left: 0");
 
-            Animation anim = this.transform.Find("Start Button").gameObject.GetComponent<Animation>();
-            anim["TargetBreak"].time = 0;
             this.transform.Find("Start Button").gameObject.SetActive(true);
+
+            listOfTargets = this.transform.Find("SpawnZone").gameObject.GetComponent<TargetSpawner>().spawnedTargets;
+            listOfTargets.Find(<GameObject>);
+            ClearTargets(tgt)
 
             this.transform.Find("SpawnZone").gameObject.SetActive(false);
             startGameScript.enabled = true;
             gamePlayingScript.enabled = false;
         }
+    }
+
+    void ClearTargets(GameObject t)
+    {
+        foreach (GameObject tgt in spawnedTargets)
+        {
+            Destroy(t);
+        }
+
+        spawnedTargets.RemoveAll((tgt) => tgt == null);
     }
 }

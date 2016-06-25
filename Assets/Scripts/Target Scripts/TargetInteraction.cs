@@ -31,10 +31,11 @@ public class TargetInteraction : MonoBehaviour {
 
     public IEnumerator StartButtonInteraction()
     {
-        float duration = .280f;
+        float duration = .3f;
         //Vector3 targetPosition = transform.position;
 
         Animation targetBreakAnim = GetComponent<Animation>();
+        targetBreakAnim["TargetBreak"].speed = 1;
         targetBreakAnim.Play("TargetBreak");
 
         yield return new WaitForSeconds(duration);

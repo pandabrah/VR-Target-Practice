@@ -139,8 +139,6 @@ public class VRControls : MonoBehaviour
 
         else if (attachJoint != null && device.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
         {
-            Destroy(attachJoint);
-            attachJoint = null;
             Rigidbody objRB = gunInHand.GetComponent<Rigidbody>();
 
             Transform origin = trackedController.origin ? trackedController.origin : trackedController.transform.parent;
@@ -156,6 +154,9 @@ public class VRControls : MonoBehaviour
             }
 
             objRB.maxAngularVelocity = objRB.angularVelocity.magnitude * velocityMult;
+
+            Destroy(attachJoint);
+            attachJoint = null;
 
             holdingGun = false;
 

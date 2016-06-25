@@ -19,6 +19,12 @@ public class StartGameSwitch : MonoBehaviour {
         startButton = transform.Find("Start Button").gameObject;
     }
 
+    void OnEnable()
+    {
+        AnimationClip anim = this.transform.Find("Start Button").gameObject.GetComponent<Animation>().GetClip("TargetBreak");
+        anim.SampleAnimation(this.transform.Find("Start Button").gameObject, 0);
+    }
+
     void Update()
     {
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TargetSpawner : MonoBehaviour
 {
@@ -12,9 +13,11 @@ public class TargetSpawner : MonoBehaviour
 
     public static int currentTargetCount = 0;
 
+    public List<GameObject> spawnedTargets = new List<GameObject>();
     private Vector3[] spawnPoints;
     private int spawnPointIndex;
     private int lastIndex = 0;
+    private GameObject tgt;
 
     void Awake()
     {
@@ -99,7 +102,7 @@ public class TargetSpawner : MonoBehaviour
 
     IEnumerator SpawnSingleTarget()
     {
-        yield return new WaitForSeconds(Random.Range(1,2));
+        yield return new WaitForSeconds(Random.Range(1, 2));
         CreateTargetObject(spawnPointIndex);
     }
 
@@ -138,13 +141,15 @@ public class TargetSpawner : MonoBehaviour
 
     void CreateTargetObject(int sIndex)
     {
-        GameObject t = Instantiate(target, spawnPoints[sIndex], Quaternion.identity) as GameObject;
+        tgt = Instantiate(target, spawnPoints[sIndex], Quaternion.identity) as GameObject;
 
-        t.AddComponent<TargetInteraction>();
-        t.tag = ("Target");
+        tgt.AddComponent<TargetInteraction>();
+        tgt.tag = ("Target");
 
-        BoxCollider targetHitBox = t.gameObject.AddComponent<BoxCollider>();
+        BoxCollider targetHitBox = tgt.gameObject.AddComponent<BoxCollider>();
         targetHitBox.center = new Vector3(0f, 0f, -0.17f);
         targetHitBox.size = new Vector3(1f, 1f, 0.1f);
+
+        spawnedTargets.Add(tgt);
     }
 }
