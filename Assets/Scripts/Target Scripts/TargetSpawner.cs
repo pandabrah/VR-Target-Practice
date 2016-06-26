@@ -12,18 +12,20 @@ public class TargetSpawner : MonoBehaviour
     public int ySize;
 
     public static int currentTargetCount = 0;
+    public GameObject tgt;
 
-    public List<GameObject> spawnedTargets = new List<GameObject>();
+    public List<GameObject> spawnedTargets;
     private Vector3[] spawnPoints;
     private int spawnPointIndex;
     private int lastIndex = 0;
-    public GameObject tgt;
+
 
     void Awake()
     {
         Animation setAnim = target.GetComponent<Animation>();
         setAnim.playAutomatically = false;
         CreateSpawnPoints();
+        spawnedTargets = new List<GameObject>();
     }
 
     void OnEnable()
@@ -34,6 +36,7 @@ public class TargetSpawner : MonoBehaviour
     void Update()
     {
         Spawn();
+        ClearNull();
     }
 
     void CreateSpawnPoints()
@@ -88,7 +91,7 @@ public class TargetSpawner : MonoBehaviour
         {
             if (currentTargetCount != maxTargetCount)
             {
-                StartCoroutine(SpawnSingleTarget());
+                StartCoroutine(SpawnDelay());
 
                 currentTargetCount += 1;
 
@@ -100,7 +103,7 @@ public class TargetSpawner : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnSingleTarget()
+    IEnumerator SpawnDelay()
     {
         yield return new WaitForSeconds(Random.Range(1, 2));
         CreateTargetObject(spawnPointIndex);
@@ -151,5 +154,17 @@ public class TargetSpawner : MonoBehaviour
         targetHitBox.size = new Vector3(1f, 1f, 0.1f);
 
         spawnedTargets.Add(tgt);
+        Debug.Log("Target added");
+    }
+
+    void ClearNull()
+    {
+        for (int i = spawnedTargets.Count - 1; i >= 0; i--)
+        {
+            if(spawnedTargets[i] == null)
+            {
+                spawnedTargets.RemoveAt(i);
+            }
+        }
     }
 }

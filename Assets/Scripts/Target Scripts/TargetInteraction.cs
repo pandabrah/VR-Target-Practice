@@ -15,8 +15,11 @@ public class TargetInteraction : MonoBehaviour {
         gameObject.GetComponent<BoxCollider>().enabled = false;
 
         yield return new WaitForSeconds(duration);
-
-        DestroyObject(gameObject);
+        
+        if (gameObject != null)
+        {
+            DestroyObject(gameObject);
+        }
 
         TargetSpawner.currentTargetCount -= 1;
         //Debug.Log("Object Destroyed: " + gameObject);

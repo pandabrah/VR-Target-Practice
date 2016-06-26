@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GamePlaying : MonoBehaviour {
+public class GamePlaying : MonoBehaviour
+{
 
     public GameObject timer;
     public GameObject startButton;
@@ -37,7 +38,7 @@ public class GamePlaying : MonoBehaviour {
             timer.GetComponent<TextMesh>().text = ("Time Left: " + updatedTime.ToString("0"));
         }
 
-        else if (updatedTime <= 0)
+        else if (updatedTime < 0)
         {
             updatedTime = 0;
             timer.GetComponent<TextMesh>().text = ("Time Left: 0");
@@ -55,9 +56,18 @@ public class GamePlaying : MonoBehaviour {
 
     void ClearTargets()
     {
-        foreach (GameObject tgt in listOfTargets)
-            Destroy(tgt);
-
-        listOfTargets.RemoveAll((tgt) => tgt == null);
+        for(int i = listOfTargets.Count - 1; i >= 0; i--)
+        {
+            if(listOfTargets != null)
+            {
+                Destroy(listOfTargets[i].gameObject);
+                listOfTargets.RemoveAt(i);
+            }
+        }
+        
+        //foreach (GameObject tgt in listOfTargets)
+        //    Destroy(tgt);
+        //    tgt.SetActive(false);
+        //listOfTargets.Clear();
     }
 }

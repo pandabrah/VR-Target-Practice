@@ -48,7 +48,7 @@ public class VRControls : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("Object Touched");
+        //Debug.Log("Object Touched");
         objectDetect = true;
         detectedObj = collider.gameObject;
     }
@@ -56,7 +56,7 @@ public class VRControls : MonoBehaviour
     void OnTriggerExit(Collider collider)
     {
         objectDetect = false;
-        Debug.Log("No Object Detected");
+        //Debug.Log("No Object Detected");
     }
 
     void FixedUpdate()
