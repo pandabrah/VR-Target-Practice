@@ -4,7 +4,7 @@ using System.Collections;
 public class VRShooting : MonoBehaviour
 {
     public GameObject bulletDecal;
-    public GameObject bulletShell;
+    public GameObject bullet;
 
     public static int ammoCount;
 
@@ -42,6 +42,8 @@ public class VRShooting : MonoBehaviour
             source = GetComponent<AudioSource>();
             source.PlayOneShot(gunShotSound, 1f);
 
+            StartCoroutine(GunShotAnimation());
+            BulletEject();
 
             //Check if gun has animation, if it does play it every trigger pull
             if (GetComponent<Animation>())
@@ -97,17 +99,49 @@ public class VRShooting : MonoBehaviour
         }
     }
 
-    //void BulletEject(GameObject bullet, GameObject gun)
-    //{
-    //    float randVelocity = Random.Range(200.0f, 300.0f);
+    IEnumerator GunShotAnimation()
+    {
+        float animDuration = 0.05f;
 
-    //    gunEjectChamber = gun.transform.TransformPoint(1.0f, 1.0f, 1.0f) + new Vector3(-1.0f, -1.0f, -0.7f);
-    //    GameObject bulletShell = Instantiate(bullet, gunEjectChamber, Quaternion.Euler(0f, 180f, 0f)) as GameObject;
-    //    bulletShell.AddComponent<BulletholeDecay>();
+        GameObject gunSlide = this.transform.Find("Slide").gameObject;
 
-    //    bulletShell.AddComponent<Rigidbody>();
-    //    bulletShell.GetComponent<Rigidbody>().AddRelativeForce(randVelocity, randVelocity, 0f);
-    //    bulletShell.GetComponent<Rigidbody>().AddRelativeTorque(10000.0f, 10000.0f, 10000.0f);
-    //}
+        Vector3 originalPos = new Vector3(0.0004795636f, 0.0824099f, 0.05370728f);
+        Vector3 midPos = new Vector3(originalPos.x, originalPos.y, 0f);
+
+        for (float i = 0; i < animDuration; i += Time.deltaTime)
+        {
+            Vector3 newPosition = Vector3.Lerp(originalPos, midPos, i / animDuration);
+
+            gunSlide.transform.localPosition = newPosition;
+
+            yield return null;
+        }
+
+        for (float i = 0; i < animDuration; i += Time.deltaTime)
+        {
+            Vector3 newPosition = Vector3.Lerp(midPos, originalPos, i / animDuration);
+
+            gunSlide.transform.localPosition = newPosition;
+
+            yield return null;
+        }
+
+        gunSlide.transform.localPosition = originalPos;
+
+    }
+
+    void BulletEject()
+    {
+        float randVelocity = Random.Range(50.0f, 300.0f);
+        Quaternion gunRotation = this.transform.rotation;
+
+        Vector3 gunEjectChamber = this.transform.Find("Bullet").transform.position;
+        GameObject bulletShell = Instantiate(bullet, gunEjectChamber, gunRotation) as GameObject;
+        bulletShell.AddComponent<BulletholeDecay>();
+
+        bulletShell.AddComponent<Rigidbody>();
+        bulletShell.GetComponent<Rigidbody>().AddRelativeForce(randVelocity, randVelocity, 0f);
+        bulletShell.GetComponent<Rigidbody>().AddRelativeTorque(10000.0f, 10000.0f, 10000.0f);
+    }
 }
 

@@ -56,18 +56,18 @@ public class GamePlaying : MonoBehaviour
 
     void ClearTargets()
     {
-        for(int i = listOfTargets.Count - 1; i >= 0; i--)
+        for (int i = listOfTargets.Count - 1; i >= 0; i--)
         {
-            if(listOfTargets != null)
+            if (listOfTargets != null)
             {
                 Destroy(listOfTargets[i].gameObject);
                 listOfTargets.RemoveAt(i);
             }
         }
-        
+
         //foreach (GameObject tgt in listOfTargets)
-        //    Destroy(tgt);
-        //    tgt.SetActive(false);
+        //    Destroy(tgt.gameObject);
+        //    //tgt.SetActive(false);
         //listOfTargets.Clear();
     }
 }

@@ -154,7 +154,7 @@ public class TargetSpawner : MonoBehaviour
         targetHitBox.size = new Vector3(1f, 1f, 0.1f);
 
         spawnedTargets.Add(tgt);
-        Debug.Log("Target added");
+        Debug.Log("List contains: " + spawnedTargets.Count);
     }
 
     void ClearNull()
