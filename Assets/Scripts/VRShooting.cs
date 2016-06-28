@@ -101,12 +101,12 @@ public class VRShooting : MonoBehaviour
 
     IEnumerator GunShotAnimation()
     {
-        float animDuration = 0.05f;
+        float animDuration = 0.03f;
 
         GameObject gunSlide = this.transform.Find("Slide").gameObject;
 
         Vector3 originalPos = new Vector3(0.0004795636f, 0.0824099f, 0.05370728f);
-        Vector3 midPos = new Vector3(originalPos.x, originalPos.y, 0f);
+        Vector3 midPos = new Vector3(originalPos.x, originalPos.y, -0.01f);
 
         for (float i = 0; i < animDuration; i += Time.deltaTime)
         {

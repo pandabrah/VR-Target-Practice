@@ -46,6 +46,11 @@ public class VRControls : MonoBehaviour
         menuAttachPoint = transform.GetChild(0).Find("button").GetChild(0).GetComponent<Rigidbody>();
     }
 
+    void InitializeZone()
+    {
+        
+    }
+
     void OnTriggerEnter(Collider collider)
     {
         //Debug.Log("Object Touched");
@@ -85,7 +90,7 @@ public class VRControls : MonoBehaviour
 
     void Update()
     {
-        if (holdingGun)
+        if (holdingGun && gunInHand.GetComponent<VRShooting>().enabled == false)
         {
             gunInHand.GetComponent<VRShooting>().enabled = true;
         }
@@ -125,7 +130,7 @@ public class VRControls : MonoBehaviour
 
     IEnumerator GrabGun(GameObject obj)
     {
-        yield return new WaitForEndOfFrame();
+        yield return null;
         if (attachJoint == null && device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
         {
             obj.transform.position = attachPoint.transform.position + new Vector3(0.03f, 0f, 0.05f);
