@@ -17,6 +17,8 @@ public class GamePlaying : MonoBehaviour
     private List<GameObject> listOfTargets;
     private GameObject tg;
 
+    UpdateScoreboard updateScoreboard;
+
     void Start()
     {
         startGameScript = this.GetComponent<StartGameSwitch>();
@@ -49,6 +51,7 @@ public class GamePlaying : MonoBehaviour
             ClearTargets();
 
             this.transform.Find("SpawnZone").gameObject.SetActive(false);
+            updateScoreboard.enabled = true;
             startGameScript.enabled = true;
             gamePlayingScript.enabled = false;
         }
