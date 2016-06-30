@@ -133,7 +133,7 @@ public class VRControls : MonoBehaviour
         yield return null;
         if (attachJoint == null && device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
         {
-            obj.transform.position = attachPoint.transform.position + new Vector3(0.03f, 0f, 0.05f);
+            obj.transform.position = attachPoint.transform.position;
             obj.transform.rotation = attachPoint.transform.rotation * Quaternion.Euler(45f, 0f, 0f);
             attachJoint = obj.AddComponent<FixedJoint>();
             attachJoint.connectedBody = attachPoint;
