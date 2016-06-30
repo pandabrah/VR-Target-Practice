@@ -132,7 +132,7 @@ public class VRShooting : MonoBehaviour
 
     void BulletEject()
     {
-        float randVelocity = Random.Range(50.0f, 300.0f);
+        float randVelocity = Random.Range(50.0f, 150.0f);
         Quaternion gunRotation = this.transform.rotation;
 
         Vector3 gunEjectChamber = this.transform.Find("Bullet").transform.position;

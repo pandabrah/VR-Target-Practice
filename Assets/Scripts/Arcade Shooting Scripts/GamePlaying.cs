@@ -24,6 +24,7 @@ public class GamePlaying : MonoBehaviour
         startGameScript = this.GetComponent<StartGameSwitch>();
         gamePlayingScript = this.GetComponent<GamePlaying>();
         targetSpawnerScript = this.transform.Find("SpawnZone").gameObject.GetComponent<TargetSpawner>();
+        updateScoreboard = GameObject.FindObjectOfType<UpdateScoreboard>();
     }
 
     void OnEnable()
