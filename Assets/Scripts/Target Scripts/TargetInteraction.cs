@@ -16,13 +16,16 @@ public class TargetInteraction : MonoBehaviour {
 
         yield return new WaitForSeconds(duration);
 
-        if (gameObject != null)
+        if (gameObject == null)
+        {
+            yield break;
+        }
+
+        else
         {
             DestroyObject(gameObject);
         }
 
-        else
-            yield break;
         TargetSpawner.currentTargetCount -= 1;
         //Debug.Log("Object Destroyed: " + gameObject);
 

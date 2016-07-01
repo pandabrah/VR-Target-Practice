@@ -53,6 +53,12 @@ public class TargetSpawner : MonoBehaviour
 
     void InitialSpawn()
     {
+        //Checks if target counter is reset; if not, reset it back to zero.
+        if (currentTargetCount != 0)
+        {
+            currentTargetCount = 0;
+        }
+
         while (currentTargetCount != maxTargetCount)
         {
             spawnPointIndex = Random.Range(0, spawnPoints.Length);

@@ -62,13 +62,14 @@ public class GamePlaying : MonoBehaviour
     {
         for (int i = listOfTargets.Count - 1; i >= 0; i--)
         {
-            if (listOfTargets != null)
+            if (listOfTargets[i] != null)
             {
                 Destroy(listOfTargets[i].gameObject);
                 listOfTargets.RemoveAt(i);
             }
         }
 
+        targetSpawnerScript.tgt = null;
         //foreach (GameObject tgt in listOfTargets)
         //    Destroy(tgt.gameObject);
         //    //tgt.SetActive(false);
