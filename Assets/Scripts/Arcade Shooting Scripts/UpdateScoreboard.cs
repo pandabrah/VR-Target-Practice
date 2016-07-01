@@ -14,6 +14,8 @@ public class UpdateScoreboard : MonoBehaviour
     public int[] topScores;
     public string[] topScoresNames;
     private TextMesh scoreBoardText;
+    private GameObject[] goScore;
+    private GameObject[] goName;
 
     void Awake()
     {
@@ -21,6 +23,8 @@ public class UpdateScoreboard : MonoBehaviour
 
         topScores = new int[8];
         topScoresNames = new string[8];
+        goScore = new GameObject[8];
+        goName = new GameObject[8];
         scoreBoardText = this.GetComponent<TextMesh>();
 
         topScores[0] = 9999;
@@ -30,12 +34,16 @@ public class UpdateScoreboard : MonoBehaviour
         {
             topScoresNames[i] = defaultName;
         }
+
+        InitScoreboard();
     }
 
     void OnEnable()
     {
         CheckHighScore();
-        AddToScoreboard();
+        UpdateScores();
+
+        this.GetComponent<UpdateScoreboard>().enabled = false;
     }
 
     void CheckHighScore()
@@ -44,27 +52,26 @@ public class UpdateScoreboard : MonoBehaviour
 
         for (int i = 0; i <= topScores.Length - 1; i++)
         {
-            if (recentScore > topScores[i])
+            if (recentScore >= topScores[i] && recentScore != 0)
             {
-                for (int k = topScores.Length - 1; k > i; k--)
+                for (int k = topScores.Length - 1; k >= i; k--)
                 {
                     topScores[k] = topScores[k - 1];
                     //topScoresNames[k] = topScoresNames[k - 1];
                 }
 
                 topScores[i] = recentScore;
-                this.GetComponent<UpdateScoreboard>().enabled = false;
+                break;
             }
 
-            else if (recentScore < topScores[0])
+            else if (recentScore < topScores[7])
             {
-                this.GetComponent<UpdateScoreboard>().enabled = false;
                 break;
             }
         }
     }
 
-    void AddToScoreboard()
+    void UpdateScores()
     {
         Vector3 scoreOffset = new Vector3(0f, -0.5f, 0f);
 
@@ -72,22 +79,37 @@ public class UpdateScoreboard : MonoBehaviour
         {
             if (topScores[i] >= 0)
             {
-                GameObject goScore = (GameObject)Instantiate(playerScore, scoreOffset * (i + 1), Quaternion.identity);
-                goScore.transform.SetParent(this.transform.Find("Score Header"), false);
-
-                goScore.GetComponent<TextMesh>().text = ("" + topScores[i].ToString());
-                goScore.GetComponent<TextMesh>().alignment = TextAlignment.Right;
-                goScore.GetComponent<TextMesh>().anchor = TextAnchor.UpperRight;
-
-                Debug.Log("Updated top score to: " + topScores[i]);
-
-                GameObject goName = (GameObject)Instantiate(playerScore, scoreOffset * (i + 1), Quaternion.identity);
-                goName.transform.SetParent(this.transform.Find("Name Header"), false);
-                goName.GetComponent<TextMesh>().text = ("" + topScoresNames[i].ToString());
+                goScore[i].GetComponent<TextMesh>().text = ("" + topScores[i].ToString());
+                goName[i].GetComponent<TextMesh>().text = ("" + topScoresNames[i].ToString());
             }
 
             else
                 break;
+        }
+    }
+
+    void InitScoreboard()
+    {
+        Vector3 scoreOffset = new Vector3(0f, -0.5f, 0f);
+
+        for (int i = 0; i <= topScores.Length - 1; i++)
+        {
+            if (topScores[i] >= 0)
+            {
+                //Create 8 text prefabs for the scores
+                goScore[i] = (GameObject)Instantiate(playerScore, scoreOffset * (i + 1), Quaternion.identity);
+                goScore[i].transform.SetParent(this.transform.Find("Score Header"), false);
+
+                //Format score text to match right side
+                goScore[i].GetComponent<TextMesh>().text = ("" + topScores[i].ToString());
+                goScore[i].GetComponent<TextMesh>().alignment = TextAlignment.Right;
+                goScore[i].GetComponent<TextMesh>().anchor = TextAnchor.UpperRight;
+
+                //Create 8 text prefabs for the usernames
+                goName[i] = (GameObject)Instantiate(playerScore, scoreOffset * (i + 1), Quaternion.identity);
+                goName[i].transform.SetParent(this.transform.Find("Name Header"), false);
+                goName[i].GetComponent<TextMesh>().text = ("" + topScoresNames[i].ToString());
+            }
         }
     }
 }
