@@ -5,8 +5,7 @@ public class ForDebugging : MonoBehaviour {
 
     void Update()
     {
-        Debug.Log("targetHitCount = " + TargetHitCounter.targetHitCount);
-        Debug.Log("currentTargetCount = " + TargetSpawner.currentTargetCount);
+        Debug.Log("Nothing to debug right now! :D");
     }
 
 }
