@@ -105,6 +105,42 @@ public class VRShooting : MonoBehaviour
         }
     }
 
+    void OnTriggerStay(Collider col)
+    {
+        Debug.Log("Triggered: " + col.gameObject);
+
+        Transform go = col.transform;
+
+        if(go.name == "HK45_Magazine")
+        {
+            if (go.GetComponent<Magazine>())
+            {
+                go.transform.SetParent(this.transform);
+                go.GetComponent<MeshCollider>().enabled = false;
+
+                Magazine magazineScript = go.GetComponent<Magazine>();
+                magazineScript.enabled = true;
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        Transform go = col.transform;
+
+        if (go.name == "HK45_Magazine")
+        {
+            if (go.GetComponent<Magazine>())
+            {
+                Magazine magazineScript = go.GetComponent<Magazine>();
+                magazineScript.enabled = false;
+
+                go.transform.SetParent(null);
+                go.GetComponent<MeshCollider>().enabled = true;
+            }
+        }
+    }
+
     IEnumerator GunShotAnimation()
     {
         float animDuration = 0.03f;
@@ -139,7 +175,7 @@ public class VRShooting : MonoBehaviour
         Quaternion gunRotation = this.transform.rotation;
 
         Vector3 gunEjectChamber = this.transform.Find("Bullet").transform.position;
-        GameObject bulletShell = Instantiate(bullet, gunEjectChamber, gunRotation) as GameObject;
+        GameObject bulletShell = (GameObject)Instantiate(bullet, gunEjectChamber, gunRotation);
         bulletShell.AddComponent<BulletholeDecay>();
 
         bulletShell.AddComponent<Rigidbody>();

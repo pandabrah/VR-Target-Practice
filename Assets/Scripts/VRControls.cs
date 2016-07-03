@@ -46,11 +46,6 @@ public class VRControls : MonoBehaviour
         menuAttachPoint = transform.GetChild(0).Find("button").GetChild(0).GetComponent<Rigidbody>();
     }
 
-    void InitializeZone()
-    {
-        
-    }
-
     void OnTriggerEnter(Collider collider)
     {
         //Debug.Log("Object Touched");
