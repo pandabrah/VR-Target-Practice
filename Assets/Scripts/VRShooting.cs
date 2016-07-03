@@ -19,6 +19,9 @@ public class VRShooting : MonoBehaviour
 
     private SteamVR_Controller.Device controller;
 
+    private GameObject gunSlide;
+    private Vector3 originalPos;
+
     void Start()
     {
         InitGun();
@@ -28,6 +31,9 @@ public class VRShooting : MonoBehaviour
     void InitGun()
     {
         ammo = ammoCount;
+
+        gunSlide = this.transform.Find("Slide").gameObject;
+        originalPos = gunSlide.transform.localPosition;
     }
 
     void Update()
@@ -103,9 +109,6 @@ public class VRShooting : MonoBehaviour
     {
         float animDuration = 0.03f;
 
-        GameObject gunSlide = this.transform.Find("Slide").gameObject;
-
-        Vector3 originalPos = new Vector3(0.0004795636f, 0.0824099f, 0.05370728f);
         Vector3 midPos = new Vector3(originalPos.x, originalPos.y, -0.01f);
 
         for (float i = 0; i < animDuration; i += Time.deltaTime)
