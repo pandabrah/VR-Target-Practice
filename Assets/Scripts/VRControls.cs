@@ -19,6 +19,7 @@ public class VRControls : MonoBehaviour
     private SteamVR_TrackedObject trackedController;
     public static SteamVR_Controller.Device device;
     private GameObject headsetCamera;
+    private Transform cameraRigPrefab;
 
     //Menu variables
     private bool menuOn = false;
@@ -51,6 +52,7 @@ public class VRControls : MonoBehaviour
     void InitializeHeadset()
     {
         headsetCamera = FindObjectOfType<SteamVR_Camera>().gameObject;
+        cameraRigPrefab = headsetCamera.transform.parent.parent.transform;
     }
 
     void OnTriggerEnter(Collider collider)
