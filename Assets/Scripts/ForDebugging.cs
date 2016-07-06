@@ -5,7 +5,7 @@ public class ForDebugging : MonoBehaviour {
 
     void Update()
     {
-        Debug.Log("Nothing to debug right now! :D");
+        //Debug.Log("Nothing to debug right now! :D");
     }
 
 }

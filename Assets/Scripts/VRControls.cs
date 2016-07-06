@@ -9,22 +9,24 @@ public class VRControls : MonoBehaviour
 
     public float velocityMult = 3;
 
+    //Gun and object variables
     private bool objectDetect;
     private bool holdingGun;
     private GameObject gunInHand;
     private GameObject detectedObj;
 
+    //SteamVR references
     private SteamVR_TrackedObject trackedController;
     public static SteamVR_Controller.Device device;
+    private GameObject headsetCamera;
 
-    private Rigidbody attachPoint;
-    private Rigidbody menuAttachPoint;
-
-    private FixedJoint attachJoint;
-    private FixedJoint menuJoint;
-
+    //Menu variables
     private bool menuOn = false;
     private GameObject newMenu;
+
+    private Rigidbody attachPoint;
+    private FixedJoint attachJoint;
+
 
     void Awake()
     {
@@ -34,6 +36,7 @@ public class VRControls : MonoBehaviour
     void Start()
     {
         InitializeController();
+        InitializeHeadset();
     }
 
     void InitializeController()
@@ -43,7 +46,11 @@ public class VRControls : MonoBehaviour
         collider.isTrigger = true;
 
         attachPoint = transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
-        menuAttachPoint = transform.GetChild(0).Find("button").GetChild(0).GetComponent<Rigidbody>();
+    }
+
+    void InitializeHeadset()
+    {
+        headsetCamera = FindObjectOfType<SteamVR_Camera>().gameObject;
     }
 
     void OnTriggerEnter(Collider collider)
@@ -167,24 +174,25 @@ public class VRControls : MonoBehaviour
 
     void SystemMenu(GameObject menuObj)
     {
+        Ray cameraRay = new Ray(headsetCamera.transform.position, headsetCamera.transform.TransformDirection(Vector3.forward));
+        Vector3 menuAppearPoint = cameraRay.GetPoint(1f);
 
         if (menuOn == false && newMenu == null)
         {
-            menuObj.transform.position = menuAttachPoint.transform.position + new Vector3(0f, 0f, -0.01f);
-            menuObj.transform.rotation = menuAttachPoint.transform.rotation * Quaternion.Euler(90f, 0f, 0f);
+            menuObj.transform.position = menuAppearPoint;
+            Quaternion menuObjRotation = menuObj.transform.rotation;
+            menuObjRotation = headsetCamera.transform.rotation * Quaternion.Euler(-90f, 0f, 0f);
+            menuObjRotation.z = 0f;
 
             newMenu = (GameObject)Instantiate(menuObj, menuObj.transform.position, menuObj.transform.rotation);
 
-            menuJoint = newMenu.AddComponent<FixedJoint>();
-            menuJoint.connectedBody = menuAttachPoint;
-
             menuOn = true;
+
+            Debug.Log("Menu Spawn attempted");
         }
 
         else if (menuOn == true && newMenu != null)
         {
-            Destroy(menuJoint);
-            menuJoint = null;
             DestroyObject(newMenu);
 
             menuOn = false;
