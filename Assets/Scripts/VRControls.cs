@@ -20,6 +20,7 @@ public class VRControls : MonoBehaviour
     public static SteamVR_Controller.Device device;
     private GameObject headsetCamera;
     private Transform cameraRigPrefab;
+    private GameObject controllerTip;
 
     //Menu variables
     private bool menuOn = false;
@@ -38,6 +39,7 @@ public class VRControls : MonoBehaviour
     {
         InitializeController();
         InitializeHeadset();
+        InitializePointer();
     }
 
     void InitializeController()
@@ -46,13 +48,18 @@ public class VRControls : MonoBehaviour
         collider.radius = 0.03f;
         collider.isTrigger = true;
 
-        attachPoint = transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
+        attachPoint = this.transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
     }
 
     void InitializeHeadset()
     {
         headsetCamera = FindObjectOfType<SteamVR_Camera>().gameObject;
         cameraRigPrefab = headsetCamera.transform.parent.parent.transform;
+    }
+
+    void InitializePointer()
+    {
+        controllerTip = this.transform.GetChild(0).Find("tip").gameObject;
     }
 
     void OnTriggerEnter(Collider collider)
@@ -98,6 +105,49 @@ public class VRControls : MonoBehaviour
         {
             gunInHand.GetComponent<VRShooting>().enabled = true;
         }
+
+        if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
+        {
+            StartCoroutine(Teleport());
+        }
+    }
+    IEnumerator Teleport()
+    {
+        yield return null;
+        Vector3 originalPos = cameraRigPrefab.transform.position;
+        LineRenderer laserPointer = controllerTip.GetComponent<LineRenderer>();
+
+        Vector3 tpPoint = TPRay();
+
+        while (tpPoint == originalPos)
+        {
+            tpPoint = TPRay();
+        }
+
+        laserPointer.enabled = true;
+
+        if (tpPoint != originalPos)
+        {
+            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+            {
+                originalPos = tpPoint;
+                laserPointer.enabled = false;
+            }
+        }
+    }
+
+    Vector3 TPRay()
+    {
+        Ray tpRay = new Ray(controllerTip.transform.position, controllerTip.transform.TransformDirection(Vector3.forward));
+        RaycastHit hit;
+
+        if (Physics.Raycast(tpRay, out hit))
+        {
+            return hit.point;
+        }
+
+        else
+            return cameraRigPrefab.transform.position;
     }
 
     void GrabObject(GameObject obj)
