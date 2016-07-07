@@ -29,6 +29,9 @@ public class VRControls : MonoBehaviour
     private Rigidbody attachPoint;
     private FixedJoint attachJoint;
 
+    //Laserpointer variables
+    private GameObject laserPointer;
+    private float laserDistY = 0;
 
     void Awake()
     {
@@ -53,13 +56,19 @@ public class VRControls : MonoBehaviour
 
     void InitializeHeadset()
     {
-        headsetCamera = FindObjectOfType<SteamVR_Camera>().gameObject;
-        cameraRigPrefab = headsetCamera.transform.parent.parent.transform;
+        cameraRigPrefab = this.transform.parent.transform;
     }
 
     void InitializePointer()
     {
         controllerTip = this.transform.GetChild(0).Find("tip").gameObject;
+
+        laserPointer = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        laserPointer.transform.parent = controllerTip.transform;
+        laserPointer.transform.localScale = new Vector3(0.1f, laserDistY, 0.1f);
+        laserPointer.transform.localPosition = Vector3.zero;
+
+        SphereCollider endPoint = laserPointer.AddComponent<SphereCollider>();
     }
 
     void OnTriggerEnter(Collider collider)
@@ -101,6 +110,8 @@ public class VRControls : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(cameraRigPrefab);
+
         if (holdingGun && gunInHand.GetComponent<VRShooting>().enabled == false)
         {
             gunInHand.GetComponent<VRShooting>().enabled = true;
@@ -115,7 +126,7 @@ public class VRControls : MonoBehaviour
     {
         yield return null;
         Vector3 originalPos = cameraRigPrefab.transform.position;
-        LineRenderer laserPointer = controllerTip.GetComponent<LineRenderer>();
+        Debug.Log(originalPos);
 
         Vector3 tpPoint = TPRay();
 
@@ -124,14 +135,11 @@ public class VRControls : MonoBehaviour
             tpPoint = TPRay();
         }
 
-        laserPointer.enabled = true;
-
         if (tpPoint != originalPos)
         {
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
             {
                 originalPos = tpPoint;
-                laserPointer.enabled = false;
             }
         }
     }
