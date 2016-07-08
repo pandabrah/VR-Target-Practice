@@ -13,7 +13,6 @@ public class Teleport : MonoBehaviour
     private GameObject laserPointer;
     public float laserDistY = 0.1f;
 
-
     void Start()
     {
         //InitializePointer();
@@ -27,7 +26,9 @@ public class Teleport : MonoBehaviour
     {
         //Update laserpointer
         Debug.Log(controller);
-        Debug.DrawRay(controllerTip.transform.position, controllerTip.transform.TransformDirection(Vector3.forward));
+        Debug.DrawRay(controllerTip.transform.position, controllerTip.transform.TransformDirection(new Vector3(0f, -0.5f, 1f)));
+
+        steamLaser.enabled = true;
 
         if (controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
         {
@@ -68,6 +69,8 @@ public class Teleport : MonoBehaviour
 
     Vector3 TPRay()
     {
+        Vector3 rayEnd = new Vector3(0f, -0.5f, 1f);
+
         Ray tpRay = new Ray(controllerTip.transform.position, controllerTip.transform.TransformDirection(Vector3.forward));
         RaycastHit hit;
 

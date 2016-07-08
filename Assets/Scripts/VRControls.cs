@@ -43,7 +43,7 @@ public class VRControls : MonoBehaviour
     void InitializeController()
     {
         SphereCollider collider = this.gameObject.AddComponent<SphereCollider>();
-        collider.radius = 0.03f;
+        collider.radius = 0.01f;
         collider.isTrigger = true;
 
         attachPoint = this.transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
