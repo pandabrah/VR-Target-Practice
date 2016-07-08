@@ -73,8 +73,6 @@ public class UpdateScoreboard : MonoBehaviour
 
     void UpdateScores()
     {
-        Vector3 scoreOffset = new Vector3(0f, -0.5f, 0f);
-
         for (int i = 0; i <= topScores.Length - 1; i++)
         {
             if (topScores[i] >= 0)

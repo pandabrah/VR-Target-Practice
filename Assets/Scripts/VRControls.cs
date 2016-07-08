@@ -16,11 +16,11 @@ public class VRControls : MonoBehaviour
     private GameObject detectedObj;
 
     //SteamVR references
-    private SteamVR_TrackedObject trackedController;
     public static SteamVR_Controller.Device device;
+    private GameObject controllerTip;
+    private SteamVR_TrackedObject trackedController;
     private GameObject headsetCamera;
     private Transform cameraRigPrefab;
-    private GameObject controllerTip;
 
     //Menu variables
     private bool menuOn = false;
@@ -28,10 +28,6 @@ public class VRControls : MonoBehaviour
 
     private Rigidbody attachPoint;
     private FixedJoint attachJoint;
-
-    //Laserpointer variables
-    private GameObject laserPointer;
-    private float laserDistY = 0;
 
     void Awake()
     {
@@ -42,7 +38,6 @@ public class VRControls : MonoBehaviour
     {
         InitializeController();
         InitializeHeadset();
-        InitializePointer();
     }
 
     void InitializeController()
@@ -57,18 +52,6 @@ public class VRControls : MonoBehaviour
     void InitializeHeadset()
     {
         cameraRigPrefab = this.transform.parent.transform;
-    }
-
-    void InitializePointer()
-    {
-        controllerTip = this.transform.GetChild(0).Find("tip").gameObject;
-
-        laserPointer = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        laserPointer.transform.parent = controllerTip.transform;
-        laserPointer.transform.localScale = new Vector3(0.1f, laserDistY, 0.1f);
-        laserPointer.transform.localPosition = Vector3.zero;
-
-        SphereCollider endPoint = laserPointer.AddComponent<SphereCollider>();
     }
 
     void OnTriggerEnter(Collider collider)
@@ -110,8 +93,6 @@ public class VRControls : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(cameraRigPrefab);
-
         if (holdingGun && gunInHand.GetComponent<VRShooting>().enabled == false)
         {
             gunInHand.GetComponent<VRShooting>().enabled = true;
@@ -119,43 +100,8 @@ public class VRControls : MonoBehaviour
 
         if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
         {
-            StartCoroutine(Teleport());
+            this.gameObject.GetComponent<Teleport>().enabled = true;
         }
-    }
-    IEnumerator Teleport()
-    {
-        yield return null;
-        Vector3 originalPos = cameraRigPrefab.transform.position;
-        Debug.Log(originalPos);
-
-        Vector3 tpPoint = TPRay();
-
-        while (tpPoint == originalPos)
-        {
-            tpPoint = TPRay();
-        }
-
-        if (tpPoint != originalPos)
-        {
-            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
-            {
-                originalPos = tpPoint;
-            }
-        }
-    }
-
-    Vector3 TPRay()
-    {
-        Ray tpRay = new Ray(controllerTip.transform.position, controllerTip.transform.TransformDirection(Vector3.forward));
-        RaycastHit hit;
-
-        if (Physics.Raycast(tpRay, out hit))
-        {
-            return hit.point;
-        }
-
-        else
-            return cameraRigPrefab.transform.position;
     }
 
     void GrabObject(GameObject obj)
