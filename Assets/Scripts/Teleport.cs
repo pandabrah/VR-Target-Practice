@@ -28,8 +28,6 @@ public class Teleport : MonoBehaviour
         Debug.Log(controller);
         Debug.DrawRay(controllerTip.transform.position, controllerTip.transform.TransformDirection(new Vector3(0f, -0.5f, 1f)));
 
-        steamLaser.enabled = true;
-
         if (controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
         {
             Vector3 originalPos = cameraRigPrefab.transform.position;

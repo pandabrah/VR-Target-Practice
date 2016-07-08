@@ -29,6 +29,8 @@ public class VRControls : MonoBehaviour
     private Rigidbody attachPoint;
     private FixedJoint attachJoint;
 
+    private GameObject attachPointVisual;
+
     void Awake()
     {
         trackedController = GetComponent<SteamVR_TrackedObject>();
@@ -47,6 +49,17 @@ public class VRControls : MonoBehaviour
         collider.isTrigger = true;
 
         attachPoint = this.transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
+
+        attachPointVisual = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        attachPointVisual.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
+        attachPointVisual.transform.localPosition = this.transform.GetChild(0).Find("tip").position;
+        attachPointVisual.transform.SetParent(this.transform.GetChild(0).Find("tip"));
+
+        if (attachPointVisual.GetComponent<SphereCollider>())
+        {
+            Destroy(attachPointVisual.GetComponent<SphereCollider>());
+        }
+
     }
 
     void InitializeHeadset()
