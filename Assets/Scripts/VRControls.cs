@@ -65,6 +65,8 @@ public class VRControls : MonoBehaviour
     void InitializeHeadset()
     {
         cameraRigPrefab = this.transform.parent.transform;
+
+        headsetCamera = this.transform.parent.Find("Camera (head)").gameObject;
     }
 
     void OnTriggerEnter(Collider collider)
@@ -194,9 +196,16 @@ public class VRControls : MonoBehaviour
     void SystemMenu(GameObject menuObj)
     {
         Ray cameraRay = new Ray(headsetCamera.transform.position, headsetCamera.transform.TransformDirection(Vector3.forward));
-        Vector3 menuAppearPoint = cameraRay.GetPoint(1f);
+        Vector3 menuAppearPoint = cameraRay.GetPoint(0.5f);
 
-        if (menuOn == false && newMenu == null)
+        if (menuOn == true && newMenu != null)
+        {
+            DestroyObject(newMenu);
+
+            menuOn = false;
+        }
+
+        else if (menuOn == false && newMenu == null)
         {
             menuObj.transform.position = menuAppearPoint;
             Quaternion menuObjRotation = menuObj.transform.rotation;
@@ -208,13 +217,6 @@ public class VRControls : MonoBehaviour
             menuOn = true;
 
             Debug.Log("Menu Spawn attempted");
-        }
-
-        else if (menuOn == true && newMenu != null)
-        {
-            DestroyObject(newMenu);
-
-            menuOn = false;
         }
     }
 }
