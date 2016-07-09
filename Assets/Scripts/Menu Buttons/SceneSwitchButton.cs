@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class Button : MonoBehaviour {
+public class SceneSwitchButton : MonoBehaviour {
 
     private bool btnSelected = false;
     private bool isTestZone = false;
@@ -17,15 +17,17 @@ public class Button : MonoBehaviour {
     {
         buttonOffColor = this.GetComponent<Renderer>().material.color;
         buttonOnColor = Color.white;
+
+        buttonTxt = this.transform.GetChild(0).GetComponent<TextMesh>();
     }
 
-    void OnTriggerEnter()
+    void OnColliderEnter()
     {
         this.GetComponent<Renderer>().material.SetColor("_Color", buttonOnColor);
         btnSelected = true;
     }
 
-    void OnTriggerExit()
+    void OnColliderExit()
     {
         this.GetComponent<Renderer>().material.SetColor("_Color", buttonOffColor);
         btnSelected = false;
@@ -34,7 +36,6 @@ public class Button : MonoBehaviour {
     void FixedUpdate()
     {
         controller = VRControls.device;
-        buttonTxt = this.transform.GetChild(0).GetComponent<TextMesh>();
 
         UpdateScene();
         UpdateText();
