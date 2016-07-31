@@ -11,7 +11,7 @@ public class VRControls : MonoBehaviour
 
     //Gun and object variables
     private bool objectDetect;
-    private bool holdingGun;
+    private bool holdingGun = false;
     private GameObject gunInHand;
     private GameObject detectedObj;
 
