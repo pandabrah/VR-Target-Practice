@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class UpdateScoreboard : MonoBehaviour
 {
@@ -8,11 +10,14 @@ public class UpdateScoreboard : MonoBehaviour
     public string defaultName;
     public GameObject playerScore;
 
+    private string saveDirectory;
+    private string saveName;
+
     //Dictionary<string, int> playerScores;
 
-    private int recentScore;
     public int[] topScores;
     public string[] topScoresNames;
+    private int recentScore;
     private TextMesh scoreBoardText;
     private GameObject[] goScore;
     private GameObject[] goName;
@@ -27,6 +32,7 @@ public class UpdateScoreboard : MonoBehaviour
         goName = new GameObject[8];
         scoreBoardText = this.GetComponent<TextMesh>();
 
+        //Temporary until save/load working
         topScores[0] = 9999;
         topScores[1] = 1;
 
@@ -109,5 +115,18 @@ public class UpdateScoreboard : MonoBehaviour
                 goName[i].GetComponent<TextMesh>().text = ("" + topScoresNames[i].ToString());
             }
         }
+    }
+
+    void Save()
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        if (!Directory.Exists(saveDirectory))
+        {
+            Directory.CreateDirectory(saveDirectory);
+        }
+
+        FileStream file = File.Create(saveName);
+
+        
     }
 }
