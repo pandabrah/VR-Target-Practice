@@ -129,6 +129,11 @@ public class VRControls : MonoBehaviour
             attachJoint.connectedBody = attachPoint;
         }
 
+        if (attachJoint.connectedBody != attachPoint)
+        {
+            attachJoint = null;
+        }
+
         else if (attachJoint != null && device.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
         {
             Destroy(attachJoint);
@@ -163,6 +168,11 @@ public class VRControls : MonoBehaviour
 
             gunInHand = obj.gameObject;
             holdingGun = true;
+        }
+
+        if (attachJoint.connectedBody != attachPoint)
+        {
+            attachJoint = null;
         }
 
         else if (attachJoint != null && device.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
