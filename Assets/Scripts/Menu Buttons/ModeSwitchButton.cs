@@ -3,13 +3,9 @@ using System.Collections;
 
 public class ModeSwitchButton : MonoBehaviour {
 
-    public GameObject gameModeGroup;
-
-    private GameObject arcadeShooting;
-    private GameObject aimPractice;
-
+    private GamemodeInit gameModes;
+    
     private bool btnSelected = false;
-    private bool isTestZone = false;
     private Color buttonOffColor;
     private Color buttonOnColor;
     private TextMesh buttonTxt;
@@ -18,58 +14,62 @@ public class ModeSwitchButton : MonoBehaviour {
 
     void Start()
     {
-        GrabModes();
         buttonOffColor = this.GetComponent<Renderer>().material.color;
         buttonOnColor = Color.white;
 
         buttonTxt = this.transform.GetChild(0).GetComponent<TextMesh>();
     }
 
-    void GrabModes()
+    void OnTriggerEnter(Collider col)
     {
-        arcadeShooting = gameModeGroup.transform.Find("Arcade Shooting").gameObject;
-        aimPractice = gameModeGroup.transform.Find("Aim Practice").gameObject;
+        if (col.tag != "Attach Point")
+            return;
+
+        else if (col.tag == "Attach Point")
+        {
+            this.GetComponent<Renderer>().material.SetColor("_Color", buttonOnColor);
+            btnSelected = true;
+        }
     }
 
-    void OnColliderEnter()
+    void OnTriggerExit(Collider col)
     {
-        this.GetComponent<Renderer>().material.SetColor("_Color", buttonOnColor);
-        btnSelected = true;
-    }
+        if (col.tag != "Attach Point")
+            return;
 
-    void OnColliderExit()
-    {
-        this.GetComponent<Renderer>().material.SetColor("_Color", buttonOffColor);
-        btnSelected = false;
+        else if (col.tag == "Attach Point")
+        {
+            this.GetComponent<Renderer>().material.SetColor("_Color", buttonOffColor);
+            btnSelected = false;
+        }
     }
 
     void FixedUpdate()
     {
         controller = VRControls.device;
+        UpdateText();
 
-        if (btnSelected = true && controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+        if (btnSelected == true && controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
         {
-            if (arcadeShooting.activeSelf == false)
+            if (gameModes.arcadeShooting.activeSelf == false)
             {
-                arcadeShooting.SetActive(true);
-                aimPractice.SetActive(false);
-                
+                gameModes.arcadeShooting.SetActive(true);
+                gameModes.aimPractice.SetActive(false);
             }
 
-            else if (arcadeShooting.activeSelf == true)
+            else if (gameModes.arcadeShooting.activeSelf == true)
             {
-                arcadeShooting.SetActive(false);
-                aimPractice.SetActive(true);
+                gameModes.arcadeShooting.SetActive(false);
+                gameModes.aimPractice.SetActive(true);
             }
         }
     }
 
     void UpdateText()
     {
-        if (arcadeShooting.activeSelf == true)
-        {
+        if (gameModes.arcadeShooting.activeInHierarchy == true)
             buttonTxt.text = ("To Aim Practice");
-        }
+
         else
             buttonTxt.text = ("To Arcade Shooting");
     }

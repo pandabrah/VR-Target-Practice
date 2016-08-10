@@ -44,11 +44,10 @@ public class VRControls : MonoBehaviour
 
     void InitializeController()
     {
-        SphereCollider collider = this.gameObject.AddComponent<SphereCollider>();
+        attachPoint = this.transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
+        SphereCollider collider = attachPoint.gameObject.AddComponent<SphereCollider>();
         collider.radius = 0.01f;
         collider.isTrigger = true;
-
-        attachPoint = this.transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
 
         if (attachPoint.tag != "Attach Point")
         {
@@ -58,7 +57,7 @@ public class VRControls : MonoBehaviour
         //Places a visual where the attach point is
         attachPointVisual = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         attachPointVisual.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
-        attachPointVisual.transform.localPosition = this.transform.GetChild(0).Find("tip").position;
+        attachPointVisual.transform.localPosition = attachPoint.gameObject.transform.position;
         attachPointVisual.transform.SetParent(this.transform.GetChild(0).Find("tip"));
 
         //Check for duplicate colliders and delete them if they exist
@@ -78,7 +77,8 @@ public class VRControls : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        //Debug.Log("Object Touched");
+        Debug.Log("Object Touched");
+        Debug.Log("Object is " + collider);
         objectDetect = true;
         detectedObj = collider.gameObject;
     }
@@ -136,11 +136,6 @@ public class VRControls : MonoBehaviour
             attachJoint.connectedBody = attachPoint;
         }
 
-        if (attachJoint.connectedBody != attachPoint)
-        {
-            attachJoint = null;
-        }
-
         else if (attachJoint != null && device.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
         {
             Destroy(attachJoint);
@@ -175,11 +170,6 @@ public class VRControls : MonoBehaviour
 
             gunInHand = obj.gameObject;
             holdingGun = true;
-        }
-
-        if (attachJoint.connectedBody != attachPoint)
-        {
-            attachJoint = null;
         }
 
         else if (attachJoint != null && device.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))

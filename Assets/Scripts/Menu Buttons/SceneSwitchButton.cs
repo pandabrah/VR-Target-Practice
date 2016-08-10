@@ -23,6 +23,8 @@ public class SceneSwitchButton : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
+        Debug.Log(col);
+
         if (col.tag != "Attach Point")
             return;
 
@@ -47,34 +49,27 @@ public class SceneSwitchButton : MonoBehaviour {
 
     void FixedUpdate()
     {
-        Debug.Log("btnSelected" + btnSelected);
+        Debug.Log("btnSelected is " + btnSelected);
 
         controller = VRControls.device;
 
         UpdateScene();
         UpdateText();
 
-        if (btnSelected = true && controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+        if (btnSelected == true && controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
         {
             if (isTestZone == false)
-            {
                 SceneManager.LoadScene("TestZone");
-            }
 
             else if (isTestZone == true)
-            {
                 SceneManager.LoadScene("Experimenting");
-            }
         }
-
     }
 
     void UpdateScene()
     {
         if (SceneManager.GetActiveScene().name == ("TestZone"))
-        {
             isTestZone = true;
-        }
 
         else
             isTestZone = false;
@@ -83,13 +78,9 @@ public class SceneSwitchButton : MonoBehaviour {
     void UpdateText()
     {
         if (isTestZone == false)
-        {
             buttonTxt.text = ("To TestZone");
-        }
 
         else if (isTestZone == true)
-        {
             buttonTxt.text = ("To Experimenting");
-        }
     }
 }
