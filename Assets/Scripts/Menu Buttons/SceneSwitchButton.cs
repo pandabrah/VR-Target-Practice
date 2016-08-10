@@ -21,20 +21,34 @@ public class SceneSwitchButton : MonoBehaviour {
         buttonTxt = this.transform.GetChild(0).GetComponent<TextMesh>();
     }
 
-    void OnColliderEnter()
+    void OnTriggerEnter(Collider col)
     {
-        this.GetComponent<Renderer>().material.SetColor("_Color", buttonOnColor);
-        btnSelected = true;
+        if (col.tag != "Attach Point")
+            return;
+
+        else if (col.tag == "Attach Point")
+        {
+            this.GetComponent<Renderer>().material.SetColor("_Color", buttonOnColor);
+            btnSelected = true;
+        }
     }
 
-    void OnColliderExit()
+    void OnTriggerExit(Collider col)
     {
-        this.GetComponent<Renderer>().material.SetColor("_Color", buttonOffColor);
-        btnSelected = false;
+        if (col.tag != "Attach Point")
+            return;
+
+        else if (col.tag == "Attach Point")
+        {
+            this.GetComponent<Renderer>().material.SetColor("_Color", buttonOffColor);
+            btnSelected = false;
+        }
     }
 
     void FixedUpdate()
     {
+        Debug.Log("btnSelected" + btnSelected);
+
         controller = VRControls.device;
 
         UpdateScene();

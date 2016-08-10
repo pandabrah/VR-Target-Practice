@@ -50,11 +50,18 @@ public class VRControls : MonoBehaviour
 
         attachPoint = this.transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
 
+        if (attachPoint.tag != "Attach Point")
+        {
+            attachPoint.tag = "Attach Point";
+        }
+
+        //Places a visual where the attach point is
         attachPointVisual = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         attachPointVisual.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
         attachPointVisual.transform.localPosition = this.transform.GetChild(0).Find("tip").position;
         attachPointVisual.transform.SetParent(this.transform.GetChild(0).Find("tip"));
 
+        //Check for duplicate colliders and delete them if they exist
         if (attachPointVisual.GetComponent<SphereCollider>())
         {
             Destroy(attachPointVisual.GetComponent<SphereCollider>());
@@ -225,8 +232,6 @@ public class VRControls : MonoBehaviour
             newMenu = (GameObject)Instantiate(menuObj, menuObj.transform.position, menuObj.transform.rotation);
 
             menuOn = true;
-
-            Debug.Log("Menu Spawn attempted");
         }
     }
 }
