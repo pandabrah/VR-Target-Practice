@@ -203,8 +203,7 @@ public class VRControls : MonoBehaviour
     void SystemMenu(GameObject menuObj)
     {
         Ray cameraRay = new Ray(headsetCamera.transform.position, headsetCamera.transform.TransformDirection(Vector3.forward));
-        Vector3 menuAppearPoint = cameraRay.GetPoint(0.5f);
-
+        
         if (menuOn == true && newMenu != null)
         {
             DestroyObject(newMenu);
@@ -214,12 +213,11 @@ public class VRControls : MonoBehaviour
 
         else if (menuOn == false && newMenu == null)
         {
-            menuObj.transform.position = menuAppearPoint;
+            menuObj.transform.position = cameraRay.GetPoint(0.5f);
             Quaternion menuObjRotation = menuObj.transform.rotation;
             menuObjRotation = headsetCamera.transform.rotation * Quaternion.Euler(-90f, 0f, 0f);
-            menuObjRotation.z = 0f;
 
-            newMenu = (GameObject)Instantiate(menuObj, menuObj.transform.position, menuObj.transform.rotation);
+            newMenu = (GameObject)Instantiate(menuObj, menuObj.transform.position, menuObjRotation);
 
             menuOn = true;
         }

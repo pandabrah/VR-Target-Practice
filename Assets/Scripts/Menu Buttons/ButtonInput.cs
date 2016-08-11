@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ModeSwitchButton : MonoBehaviour {
-    
+public class ButtonInput : MonoBehaviour {
+
     private bool btnSelected = false;
     private Color buttonOffColor;
     private Color buttonOnColor;
@@ -42,33 +42,13 @@ public class ModeSwitchButton : MonoBehaviour {
         }
     }
 
-//    void FixedUpdate()
-//    {
-//        controller = VRControls.device;
-//        UpdateText();
+    void FixedUpdate()
+    {
+        controller = VRControls.device;
 
-//        if (btnSelected == true && controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
-//        {
-//            if (gameModes.arcadeShooting.activeSelf == false)
-//            {
-//                gameModes.arcadeShooting.SetActive(true);
-//                gameModes.aimPractice.SetActive(false);
-//            }
-
-//            else if (gameModes.arcadeShooting.activeSelf == true)
-//            {
-//                gameModes.arcadeShooting.SetActive(false);
-//                gameModes.aimPractice.SetActive(true);
-//            }
-//        }
-//    }
-
-//    void UpdateText()
-//    {
-//        if (gameModes.arcadeShooting.activeInHierarchy == true)
-//            buttonTxt.text = ("To Aim Practice");
-
-//        else
-//            buttonTxt.text = ("To Arcade Shooting");
-//    }
+        if (btnSelected == true && controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+        {
+            EventManager.TriggerEvent("ModeSwitch");
+        }
+    }
 }
