@@ -11,7 +11,7 @@ public class VRControls : MonoBehaviour
 
     //Gun and object variables
     private bool objectDetect;
-    private bool holdingGun = false;
+    public bool holdingGun = false;
     private GameObject gunInHand;
     private GameObject detectedObj;
 
@@ -45,9 +45,10 @@ public class VRControls : MonoBehaviour
     void InitializeController()
     {
         attachPoint = this.transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
-        SphereCollider collider = attachPoint.gameObject.AddComponent<SphereCollider>();
+        SphereCollider collider = this.gameObject.AddComponent<SphereCollider>();
         collider.radius = 0.01f;
         collider.isTrigger = true;
+        collider.center = new Vector3(0f, -0.01f, 0.008f);
 
         if (attachPoint.tag != "Attach Point")
         {
@@ -71,7 +72,6 @@ public class VRControls : MonoBehaviour
     void InitializeHeadset()
     {
         cameraRigPrefab = this.transform.parent.transform;
-
         headsetCamera = this.transform.parent.Find("Camera (head)").gameObject;
     }
 
@@ -86,7 +86,6 @@ public class VRControls : MonoBehaviour
     void OnTriggerExit(Collider collider)
     {
         objectDetect = false;
-        //Debug.Log("No Object Detected");
     }
 
     void FixedUpdate()
@@ -108,9 +107,9 @@ public class VRControls : MonoBehaviour
 
         if (device.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
         {
-            SystemMenu(menu);
+            menuOn = menu.activeInHierarchy;
+            SystemMenu(menu, menuOn);
         }
-
     }
 
     void Update()
@@ -200,26 +199,18 @@ public class VRControls : MonoBehaviour
         }
     }
 
-    void SystemMenu(GameObject menuObj)
+    void SystemMenu(GameObject menuObj, bool menuActive)
     {
         Ray cameraRay = new Ray(headsetCamera.transform.position, headsetCamera.transform.TransformDirection(Vector3.forward));
-        
-        if (menuOn == true && newMenu != null)
-        {
-            DestroyObject(newMenu);
 
-            menuOn = false;
-        }
-
-        else if (menuOn == false && newMenu == null)
+        if (menuActive == false)
         {
             menuObj.transform.position = cameraRay.GetPoint(0.5f);
-            Quaternion menuObjRotation = menuObj.transform.rotation;
-            menuObjRotation = headsetCamera.transform.rotation * Quaternion.Euler(-90f, 0f, 0f);
-
-            newMenu = (GameObject)Instantiate(menuObj, menuObj.transform.position, menuObjRotation);
-
-            menuOn = true;
+            menuObj.transform.rotation = headsetCamera.transform.rotation * Quaternion.Euler(-90f, 0f, 0f);
+            menuObj.SetActive(true);
         }
+
+        else if (menuActive == true)
+            menuObj.SetActive(false);
     }
 }

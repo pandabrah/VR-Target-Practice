@@ -10,6 +10,9 @@ public class ModeSwitchButton : MonoBehaviour {
 
     private SteamVR_Controller.Device controller;
 
+    public GameObject arcadeShooting;
+    public GameObject aimPractice;
+
     void Start()
     {
         buttonOffColor = this.GetComponent<Renderer>().material.color;
@@ -20,10 +23,10 @@ public class ModeSwitchButton : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.tag != "Attach Point")
+        if (col.tag != "VR Controller")
             return;
 
-        else if (col.tag == "Attach Point")
+        else if (col.tag == "VR Controller")
         {
             this.GetComponent<Renderer>().material.SetColor("_Color", buttonOnColor);
             btnSelected = true;
@@ -32,43 +35,43 @@ public class ModeSwitchButton : MonoBehaviour {
 
     void OnTriggerExit(Collider col)
     {
-        if (col.tag != "Attach Point")
+        if (col.tag != "VR Controller")
             return;
 
-        else if (col.tag == "Attach Point")
+        else if (col.tag == "VR Controller")
         {
             this.GetComponent<Renderer>().material.SetColor("_Color", buttonOffColor);
             btnSelected = false;
         }
     }
 
-//    void FixedUpdate()
-//    {
-//        controller = VRControls.device;
-//        UpdateText();
+    void FixedUpdate()
+    {
+        controller = VRControls.device;
+        UpdateText();
 
-//        if (btnSelected == true && controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
-//        {
-//            if (gameModes.arcadeShooting.activeSelf == false)
-//            {
-//                gameModes.arcadeShooting.SetActive(true);
-//                gameModes.aimPractice.SetActive(false);
-//            }
+        if (btnSelected == true && controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+        {
+            if (arcadeShooting.activeSelf == false)
+            {
+                arcadeShooting.SetActive(true);
+                aimPractice.SetActive(false);
+            }
 
-//            else if (gameModes.arcadeShooting.activeSelf == true)
-//            {
-//                gameModes.arcadeShooting.SetActive(false);
-//                gameModes.aimPractice.SetActive(true);
-//            }
-//        }
-//    }
+            else if (arcadeShooting.activeSelf == true)
+            {
+                arcadeShooting.SetActive(false);
+                aimPractice.SetActive(true);
+            }
+        }
+    }
 
-//    void UpdateText()
-//    {
-//        if (gameModes.arcadeShooting.activeInHierarchy == true)
-//            buttonTxt.text = ("To Aim Practice");
+    void UpdateText()
+    {
+        if (arcadeShooting.activeInHierarchy == true)
+            buttonTxt.text = ("To Aim Practice");
 
-//        else
-//            buttonTxt.text = ("To Arcade Shooting");
-//    }
+        else
+            buttonTxt.text = ("To Arcade Shooting");
+    }
 }

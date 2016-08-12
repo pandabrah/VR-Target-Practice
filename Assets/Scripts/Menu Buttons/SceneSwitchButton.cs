@@ -25,10 +25,10 @@ public class SceneSwitchButton : MonoBehaviour {
     {
         Debug.Log(col);
 
-        if (col.tag != "Attach Point")
+        if (col.tag != "VR Controller")
             return;
 
-        else if (col.tag == "Attach Point")
+        else if (col.tag == "VR Controller")
         {
             this.GetComponent<Renderer>().material.SetColor("_Color", buttonOnColor);
             btnSelected = true;
@@ -37,10 +37,10 @@ public class SceneSwitchButton : MonoBehaviour {
 
     void OnTriggerExit(Collider col)
     {
-        if (col.tag != "Attach Point")
+        if (col.tag != "VR Controller")
             return;
 
-        else if (col.tag == "Attach Point")
+        else if (col.tag == "VR Controller")
         {
             this.GetComponent<Renderer>().material.SetColor("_Color", buttonOffColor);
             btnSelected = false;

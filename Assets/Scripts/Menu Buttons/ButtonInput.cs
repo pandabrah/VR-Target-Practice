@@ -10,6 +10,8 @@ public class ButtonInput : MonoBehaviour {
 
     private SteamVR_Controller.Device controller;
 
+    private VRControls controlScript;
+
     void Start()
     {
         buttonOffColor = this.GetComponent<Renderer>().material.color;
@@ -46,9 +48,12 @@ public class ButtonInput : MonoBehaviour {
     {
         controller = VRControls.device;
 
-        if (btnSelected == true && controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+        if (btnSelected == true && controlScript.holdingGun == false)
         {
-            EventManager.TriggerEvent("ModeSwitch");
+            if (controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+                EventManager.TriggerEvent("ModeSwitch");
+            else
+                return;
         }
     }
 }

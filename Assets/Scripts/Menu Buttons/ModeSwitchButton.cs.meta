@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: d80788ab6c4939347815da464df30507
-timeCreated: 1468035004
+timeCreated: 1470983788
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - arcadeShooting: {fileID: 107952, guid: 995d9328deff62340886e84424b486ee, type: 2}
+  - aimPractice: {fileID: 126920, guid: 995d9328deff62340886e84424b486ee, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
