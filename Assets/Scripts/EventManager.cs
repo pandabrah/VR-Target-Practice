@@ -19,7 +19,7 @@ public class EventManager : MonoBehaviour {
 
                 if (!eventManager)
                 {
-                    Debug.LogError("there needs to be one active ButtonEvent script on a GameObject in your scene");
+                    Debug.LogError("there needs to be one active EventManager script on a GameObject in your scene");
                 }
 
                 else

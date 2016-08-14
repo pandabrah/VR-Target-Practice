@@ -9,7 +9,7 @@ public class GamePlaying : MonoBehaviour
     public GameObject startButton;
     public float initialTime = 60f;
 
-    public float updatedTime;
+    private float updatedTime;
     private StartGameSwitch startGameScript;
     private GamePlaying gamePlayingScript;
     private TargetSpawner targetSpawnerScript;
@@ -70,9 +70,5 @@ public class GamePlaying : MonoBehaviour
         }
 
         targetSpawnerScript.tgt = null;
-        //foreach (GameObject tgt in listOfTargets)
-        //    Destroy(tgt.gameObject);
-        //    //tgt.SetActive(false);
-        //listOfTargets.Clear();
     }
 }

@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class ButtonInput : MonoBehaviour {
 
     private bool btnSelected = false;
+    public static bool isTestZone = false;
     private Color buttonOffColor;
     private Color buttonOnColor;
     private TextMesh buttonTxt;
@@ -11,6 +13,8 @@ public class ButtonInput : MonoBehaviour {
     private SteamVR_Controller.Device controller;
 
     private VRControls controlScript;
+
+    public GameObject arcadeShooting;
 
     void Start()
     {
@@ -22,6 +26,8 @@ public class ButtonInput : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
+        Debug.Log("Collider is " + col);
+
         if (col.tag != "Attach Point")
             return;
 
@@ -48,12 +54,48 @@ public class ButtonInput : MonoBehaviour {
     {
         controller = VRControls.device;
 
+        UpdateText();
+        UpdateScene();
+
         if (btnSelected == true && controlScript.holdingGun == false)
         {
             if (controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
-                EventManager.TriggerEvent("ModeSwitch");
-            else
-                return;
+                if (this.name == "Mode Button")
+                    EventManager.TriggerEvent("ModeSwitch");
+                else if (this.name == "Scene Button")
+                    EventManager.TriggerEvent("SceneSwitch");
+                else
+                    return;
+        }
+    }
+
+    void UpdateScene()
+    {
+        if (SceneManager.GetActiveScene().name == ("TestZone"))
+            isTestZone = true;
+
+        else
+            isTestZone = false;
+    }
+
+    void UpdateText()
+    {
+        if (this.name == "Mode Button")
+        {
+        if (arcadeShooting.activeInHierarchy == true)
+            buttonTxt.text = ("To Aim Practice");
+
+        else
+            buttonTxt.text = ("To Arcade Shooting");
+        }
+
+        if (this.name == "Scene Button")
+        {
+            if (isTestZone == false)
+                buttonTxt.text = ("To TestZone");
+
+            else if (isTestZone == true)
+                buttonTxt.text = ("To Experimenting");
         }
     }
 }

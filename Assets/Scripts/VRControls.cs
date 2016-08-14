@@ -95,14 +95,10 @@ public class VRControls : MonoBehaviour
         if (objectDetect == true)
         {
             if (detectedObj.tag == ("Gun"))
-            {
                 StartCoroutine(GrabGun(detectedObj));
-            }
 
             else if (detectedObj.tag == ("Grabbable"))
-            {
                 GrabObject(detectedObj);
-            }
         }
 
         if (device.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
@@ -115,14 +111,10 @@ public class VRControls : MonoBehaviour
     void Update()
     {
         if (holdingGun && gunInHand.GetComponent<VRShooting>().enabled == false)
-        {
             gunInHand.GetComponent<VRShooting>().enabled = true;
-        }
 
         if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
-        {
             this.gameObject.GetComponent<Teleport>().enabled = true;
-        }
     }
 
     void GrabObject(GameObject obj)
@@ -201,10 +193,10 @@ public class VRControls : MonoBehaviour
 
     void SystemMenu(GameObject menuObj, bool menuActive)
     {
-        Ray cameraRay = new Ray(headsetCamera.transform.position, headsetCamera.transform.TransformDirection(Vector3.forward));
-
         if (menuActive == false)
         {
+            Ray cameraRay = new Ray(headsetCamera.transform.position, headsetCamera.transform.TransformDirection(Vector3.forward));
+
             menuObj.transform.position = cameraRay.GetPoint(0.5f);
             menuObj.transform.rotation = headsetCamera.transform.rotation * Quaternion.Euler(-90f, 0f, 0f);
             menuObj.SetActive(true);

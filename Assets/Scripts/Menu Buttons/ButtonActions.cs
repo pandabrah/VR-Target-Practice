@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class ButtonActions : MonoBehaviour {
+public class ButtonActions : MonoBehaviour
+{
 
     private UnityAction modeSwitch;
+    private UnityAction sceneSwitch;
 
     public GameObject arcadeShooting;
     public GameObject aimPractice;
@@ -12,16 +15,19 @@ public class ButtonActions : MonoBehaviour {
     void Awake()
     {
         modeSwitch = new UnityAction(SwitchModes);
+        sceneSwitch = new UnityAction(SwitchScenes);
     }
 
     void OnEnable()
     {
         EventManager.StartListening("ModeSwitch", modeSwitch);
+        EventManager.StartListening("SceneSwitch", sceneSwitch);
     }
 
     void OnDisable()
     {
         EventManager.StopListening("ModeSwitch", modeSwitch);
+        EventManager.StopListening("SceneSwitch", sceneSwitch);
     }
 
     void SwitchModes()
@@ -30,8 +36,6 @@ public class ButtonActions : MonoBehaviour {
         {
             arcadeShooting.SetActive(true);
             aimPractice.SetActive(false);
-
-            Debug.Log("Mode Switched");
         }
 
         else if (arcadeShooting.activeInHierarchy == true)
@@ -39,5 +43,16 @@ public class ButtonActions : MonoBehaviour {
             arcadeShooting.SetActive(false);
             aimPractice.SetActive(true);
         }
+    }
+
+    void SwitchScenes()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+
+        if (scene.name == "Experimenting")
+            SceneManager.LoadScene("TestZone");
+
+        else if (scene.name == "TestZone")
+            SceneManager.LoadScene("Experimenting");
     }
 }
