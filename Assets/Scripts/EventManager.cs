@@ -18,14 +18,10 @@ public class EventManager : MonoBehaviour {
                 eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
 
                 if (!eventManager)
-                {
                     Debug.LogError("there needs to be one active EventManager script on a GameObject in your scene");
-                }
 
                 else
-                {
                     eventManager.Init();
-                }
             }
             return eventManager;
         }
@@ -34,18 +30,14 @@ public class EventManager : MonoBehaviour {
     void Init()
     {
         if (eventDictionary == null)
-        {
             eventDictionary = new Dictionary<string, UnityEvent>();
-        }
     }
 
     public static void StartListening(string eventName, UnityAction listener)
     {
         UnityEvent thisEvent = null;
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
-        {
             thisEvent.AddListener(listener);
-        }
 
         else
         {
@@ -62,17 +54,13 @@ public class EventManager : MonoBehaviour {
 
         UnityEvent thisEvent = null;
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
-        {
             thisEvent.RemoveListener(listener);
-        }
     }
 
     public static void TriggerEvent(string eventName)
     {
         UnityEvent thisEvent = null;
         if (instance.eventDictionary.TryGetValue(eventName,out thisEvent))
-        {
             thisEvent.Invoke();
-        }
     }
 }

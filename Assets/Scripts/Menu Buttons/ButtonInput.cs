@@ -2,7 +2,8 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class ButtonInput : MonoBehaviour {
+public class ButtonInput : MonoBehaviour
+{
 
     private bool btnSelected = false;
     public static bool isTestZone = false;
@@ -11,8 +12,7 @@ public class ButtonInput : MonoBehaviour {
     private TextMesh buttonTxt;
 
     private SteamVR_Controller.Device controller;
-
-    private VRControls controlScript;
+    private bool gunInHand;
 
     public GameObject arcadeShooting;
 
@@ -53,19 +53,22 @@ public class ButtonInput : MonoBehaviour {
     void FixedUpdate()
     {
         controller = VRControls.device;
+        gunInHand = VRControls.holdingGun;
 
         UpdateText();
         UpdateScene();
 
-        if (btnSelected == true && controlScript.holdingGun == false)
+        if (btnSelected == true && gunInHand == false)
         {
             if (controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+            {
                 if (this.name == "Mode Button")
                     EventManager.TriggerEvent("ModeSwitch");
                 else if (this.name == "Scene Button")
                     EventManager.TriggerEvent("SceneSwitch");
                 else
                     return;
+            }
         }
     }
 
@@ -82,11 +85,11 @@ public class ButtonInput : MonoBehaviour {
     {
         if (this.name == "Mode Button")
         {
-        if (arcadeShooting.activeInHierarchy == true)
-            buttonTxt.text = ("To Aim Practice");
+            if (arcadeShooting.activeInHierarchy == true)
+                buttonTxt.text = ("To Aim Practice");
 
-        else
-            buttonTxt.text = ("To Arcade Shooting");
+            else
+                buttonTxt.text = ("To Arcade Shooting");
         }
 
         if (this.name == "Scene Button")

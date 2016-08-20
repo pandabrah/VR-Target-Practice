@@ -11,7 +11,7 @@ public class VRControls : MonoBehaviour
 
     //Gun and object variables
     private bool objectDetect;
-    public bool holdingGun = false;
+    public static bool holdingGun = false;
     private GameObject gunInHand;
     private GameObject detectedObj;
 
@@ -45,6 +45,11 @@ public class VRControls : MonoBehaviour
     void InitializeController()
     {
         attachPoint = this.transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
+
+        SphereCollider sCollider = attachPoint.gameObject.AddComponent<SphereCollider>();
+        sCollider.radius = 0.01f;
+        sCollider.isTrigger = true;
+
         SphereCollider collider = this.gameObject.AddComponent<SphereCollider>();
         collider.radius = 0.01f;
         collider.isTrigger = true;
