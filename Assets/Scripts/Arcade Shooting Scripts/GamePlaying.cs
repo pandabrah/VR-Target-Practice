@@ -13,11 +13,10 @@ public class GamePlaying : MonoBehaviour
     private StartGameSwitch startGameScript;
     private GamePlaying gamePlayingScript;
     private TargetSpawner targetSpawnerScript;
+    private UpdateScoreboard updateScoreboard;
 
     private List<GameObject> listOfTargets;
     private GameObject tg;
-
-    UpdateScoreboard updateScoreboard;
 
     void Start()
     {

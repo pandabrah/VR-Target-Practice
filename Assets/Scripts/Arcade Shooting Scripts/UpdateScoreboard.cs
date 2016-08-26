@@ -10,22 +10,20 @@ public class UpdateScoreboard : MonoBehaviour
     public string defaultName;
     public GameObject playerScore;
 
-    private string saveDirectory;
-    private string saveName;
-
     //Dictionary<string, int> playerScores;
 
     public int[] topScores;
     public string[] topScoresNames;
+    public GameObject[] goScore;
+    public GameObject[] goName;
+
     private int recentScore;
     private TextMesh scoreBoardText;
-    private GameObject[] goScore;
-    private GameObject[] goName;
+
 
     void Awake()
     {
         //playerScores = new Dictionary<string, int>();
-
         topScores = new int[8];
         topScoresNames = new string[8];
         goScore = new GameObject[8];
@@ -34,8 +32,6 @@ public class UpdateScoreboard : MonoBehaviour
 
         //Temporary until save/load working
         topScores[0] = 9999;
-        topScores[1] = 1;
-
         for (int i = 0; i <= topScoresNames.Length - 1; i++)
         {
             topScoresNames[i] = defaultName;
@@ -48,8 +44,36 @@ public class UpdateScoreboard : MonoBehaviour
     {
         CheckHighScore();
         UpdateScores();
+        SaveScore.SaveScores(this);
 
         this.GetComponent<UpdateScoreboard>().enabled = false;
+    }
+
+    void InitScoreboard()
+    {
+        Vector3 scoreOffset = new Vector3(0f, -0.5f, 0f);
+
+        Load();
+
+        for (int i = 0; i <= topScores.Length - 1; i++)
+        {
+            if (topScores[i] >= 0)
+            {
+                //Create 8 text prefabs for the scores
+                goScore[i] = (GameObject)Instantiate(playerScore, scoreOffset * (i + 1), Quaternion.identity);
+                goScore[i].transform.SetParent(this.transform.Find("Score Header"), false);
+
+                //Format score text to match right side
+                goScore[i].GetComponent<TextMesh>().text = ("" + topScores[i].ToString());
+                goScore[i].GetComponent<TextMesh>().alignment = TextAlignment.Right;
+                goScore[i].GetComponent<TextMesh>().anchor = TextAnchor.UpperRight;
+
+                //Create 8 text prefabs for the usernames
+                goName[i] = (GameObject)Instantiate(playerScore, scoreOffset * (i + 1), Quaternion.identity);
+                goName[i].transform.SetParent(this.transform.Find("Name Header"), false);
+                goName[i].GetComponent<TextMesh>().text = ("" + topScoresNames[i].ToString());
+            }
+        }
     }
 
     void CheckHighScore()
@@ -92,41 +116,21 @@ public class UpdateScoreboard : MonoBehaviour
         }
     }
 
-    void InitScoreboard()
+    void Load()
     {
-        Vector3 scoreOffset = new Vector3(0f, -0.5f, 0f);
+        int[] loadedScores = SaveScore.LoadScores();
+        string[] loadedNames = SaveScore.LoadNames();
 
-        for (int i = 0; i <= topScores.Length - 1; i++)
+        if (loadedScores[0] != 0)
         {
-            if (topScores[i] >= 0)
+            for (int i = 0; i <= topScores.Length - 1; i++)
             {
-                //Create 8 text prefabs for the scores
-                goScore[i] = (GameObject)Instantiate(playerScore, scoreOffset * (i + 1), Quaternion.identity);
-                goScore[i].transform.SetParent(this.transform.Find("Score Header"), false);
-
-                //Format score text to match right side
-                goScore[i].GetComponent<TextMesh>().text = ("" + topScores[i].ToString());
-                goScore[i].GetComponent<TextMesh>().alignment = TextAlignment.Right;
-                goScore[i].GetComponent<TextMesh>().anchor = TextAnchor.UpperRight;
-
-                //Create 8 text prefabs for the usernames
-                goName[i] = (GameObject)Instantiate(playerScore, scoreOffset * (i + 1), Quaternion.identity);
-                goName[i].transform.SetParent(this.transform.Find("Name Header"), false);
-                goName[i].GetComponent<TextMesh>().text = ("" + topScoresNames[i].ToString());
+                topScores[i] = loadedScores[i];
+                topScoresNames[i] = loadedNames[i];
+                Debug.Log("Loaded scores: " + topScores[i]);
             }
         }
-    }
-
-    void Save()
-    {
-        BinaryFormatter formatter = new BinaryFormatter();
-        if (!Directory.Exists(saveDirectory))
-        {
-            Directory.CreateDirectory(saveDirectory);
-        }
-
-        FileStream file = File.Create(saveName);
-
-        
+        else
+            return;
     }
 }

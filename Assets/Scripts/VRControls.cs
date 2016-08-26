@@ -118,8 +118,8 @@ public class VRControls : MonoBehaviour
         if (holdingGun && gunInHand.GetComponent<VRShooting>().enabled == false)
             gunInHand.GetComponent<VRShooting>().enabled = true;
 
-        if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
-            this.gameObject.GetComponent<Teleport>().enabled = true;
+        //if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
+        //    this.gameObject.GetComponent<Teleport>().enabled = true;
     }
 
     void GrabObject(GameObject obj)
