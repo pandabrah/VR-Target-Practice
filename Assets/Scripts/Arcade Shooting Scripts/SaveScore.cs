@@ -10,10 +10,10 @@ public class SaveScore {
     {
         BinaryFormatter formatter = new BinaryFormatter();
 
-        if (!Directory.Exists(Application.persistentDataPath))
-            Directory.CreateDirectory(Application.persistentDataPath);
+        //if (!Directory.Exists(Application.persistentDataPath))
+        //    Directory.CreateDirectory(Application.persistentDataPath);
 
-        FileStream stream = new FileStream(Application.persistentDataPath + "/scores.sav", FileMode.Create);
+        FileStream stream = File.Create(Application.persistentDataPath + "/scores.bin");
 
         PlayerScores localScores = new PlayerScores(scores);
         PlayerNames localNames = new PlayerNames(scores);
@@ -26,10 +26,10 @@ public class SaveScore {
     public static int[] LoadScores()
     {
         Debug.Log("Loading file from: " + Application.persistentDataPath);
-        if (File.Exists(Application.persistentDataPath + "/score.sav"))
+        if (File.Exists(Application.persistentDataPath + "/score.bin"))
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = File.Open(Application.persistentDataPath + "/scores.sav", FileMode.Open);
+            FileStream stream = File.Open(Application.persistentDataPath + "/scores.bin", FileMode.Open);
 
             PlayerScores localScores = formatter.Deserialize(stream) as PlayerScores;
             stream.Close();
@@ -44,10 +44,10 @@ public class SaveScore {
 
     public static string[] LoadNames()
     {
-        if (File.Exists(Application.persistentDataPath + "/score.sav"))
+        if (File.Exists(Application.persistentDataPath + "/score.bin"))
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = File.Open(Application.persistentDataPath + "/scores.sav", FileMode.Open);
+            FileStream stream = File.Open(Application.persistentDataPath + "/scores.bin", FileMode.Open);
 
             PlayerNames localNames = formatter.Deserialize(stream) as PlayerNames;
             stream.Close();
@@ -75,6 +75,7 @@ public class PlayerScores
     }
 }
 
+[Serializable]
 public class PlayerNames
 {
     public string[] savedNames = new string[8];
