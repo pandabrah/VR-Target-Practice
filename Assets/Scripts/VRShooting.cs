@@ -6,11 +6,8 @@ public class VRShooting : MonoBehaviour
     public GameObject bulletDecal;
     public GameObject bullet;
 
-    public static int ammoCount;
-
     public AudioClip gunShotSound;
 
-    private int ammo;
     private Vector3 gunEjectChamber;
 
     private Animation anim;
@@ -30,8 +27,6 @@ public class VRShooting : MonoBehaviour
 
     void InitGun()
     {
-        ammo = ammoCount;
-
         gunSlide = this.transform.Find("Slide").gameObject;
         originalPos = gunSlide.transform.localPosition;
     }

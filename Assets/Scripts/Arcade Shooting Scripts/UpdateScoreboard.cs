@@ -18,7 +18,6 @@ public class UpdateScoreboard : MonoBehaviour
     public GameObject[] goName;
 
     private int recentScore;
-    private TextMesh scoreBoardText;
 
 
     void Awake()
@@ -28,14 +27,11 @@ public class UpdateScoreboard : MonoBehaviour
         topScoresNames = new string[8];
         goScore = new GameObject[8];
         goName = new GameObject[8];
-        scoreBoardText = this.GetComponent<TextMesh>();
 
         //Temporary until save/load working
         topScores[0] = 9999;
         for (int i = 0; i <= topScoresNames.Length - 1; i++)
-        {
             topScoresNames[i] = defaultName;
-        }
 
         InitScoreboard();
     }
@@ -45,6 +41,7 @@ public class UpdateScoreboard : MonoBehaviour
         CheckHighScore();
         UpdateScores();
         SaveScore.SaveScores(this);
+        SaveScore.SaveNames(this);
 
         this.GetComponent<UpdateScoreboard>().enabled = false;
     }
@@ -59,10 +56,13 @@ public class UpdateScoreboard : MonoBehaviour
         {
             if (topScores[i] >= 0)
             {
-                //Create 8 text prefabs for the scores
-                goScore[i] = (GameObject)Instantiate(playerScore, scoreOffset * (i + 1), Quaternion.identity);
-                goScore[i].transform.SetParent(this.transform.Find("Score Header"), false);
-
+                if (goScore[i] == null)
+                {
+                    //Create 8 text prefabs for the scores
+                    goScore[i] = (GameObject)Instantiate(playerScore, scoreOffset * (i + 1), Quaternion.identity);
+                    goScore[i].transform.SetParent(this.transform.Find("Score Header"), false);
+                }
+                
                 //Format score text to match right side
                 goScore[i].GetComponent<TextMesh>().text = ("" + topScores[i].ToString());
                 goScore[i].GetComponent<TextMesh>().alignment = TextAlignment.Right;
@@ -121,6 +121,8 @@ public class UpdateScoreboard : MonoBehaviour
         int[] loadedScores = SaveScore.LoadScores();
         string[] loadedNames = SaveScore.LoadNames();
 
+        Debug.Log("loadedNames: " + loadedNames[0]);
+
         if (loadedScores[0] != 0)
         {
             for (int i = 0; i <= topScores.Length - 1; i++)
@@ -132,5 +134,14 @@ public class UpdateScoreboard : MonoBehaviour
         }
         else
             return;
+    }
+
+    void Reset()
+    {
+        for (int i = 0; i <= topScores.Length - 1; i++)
+        {
+            topScores[i] = 0;
+            topScoresNames[i] = defaultName;
+        }
     }
 }

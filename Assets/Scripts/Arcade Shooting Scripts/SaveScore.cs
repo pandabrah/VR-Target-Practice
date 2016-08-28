@@ -19,14 +19,30 @@ public class SaveScore {
         PlayerNames localNames = new PlayerNames(scores);
 
         formatter.Serialize(stream, localScores);
+        formatter.Serialize(stream, localNames);
         stream.Close();
         Debug.Log("File Saved in: " + Application.persistentDataPath);
+    }
+
+    public static void SaveNames(UpdateScoreboard scores)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+
+        //if (!Directory.Exists(Application.persistentDataPath))
+        //    Directory.CreateDirectory(Application.persistentDataPath);
+
+        FileStream stream = File.Create(Application.persistentDataPath + "/names.bin");
+
+        PlayerNames localNames = new PlayerNames(scores);
+
+        formatter.Serialize(stream, localNames);
+        stream.Close();
     }
 
     public static int[] LoadScores()
     {
         Debug.Log("Loading file from: " + Application.persistentDataPath);
-        if (File.Exists(Application.persistentDataPath + "/score.bin"))
+        if (File.Exists(Application.persistentDataPath + "/scores.bin") == true)
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = File.Open(Application.persistentDataPath + "/scores.bin", FileMode.Open);
@@ -44,10 +60,10 @@ public class SaveScore {
 
     public static string[] LoadNames()
     {
-        if (File.Exists(Application.persistentDataPath + "/score.bin"))
+        if (File.Exists(Application.persistentDataPath + "/names.bin") == true)
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = File.Open(Application.persistentDataPath + "/scores.bin", FileMode.Open);
+            FileStream stream = File.Open(Application.persistentDataPath + "/names.bin", FileMode.Open);
 
             PlayerNames localNames = formatter.Deserialize(stream) as PlayerNames;
             stream.Close();
@@ -56,7 +72,7 @@ public class SaveScore {
         else
         {
             Debug.Log("No file was found, writing default names");
-            return null;
+            return new string[8];
         }
     }
 }
@@ -69,9 +85,7 @@ public class PlayerScores
     public PlayerScores(UpdateScoreboard scores)
     {
         for (int i = 0; i < scores.topScores.Length - 1; i++)
-        {
             savedScores[i] = scores.topScores[i];
-        }
     }
 }
 
@@ -83,8 +97,6 @@ public class PlayerNames
     public PlayerNames(UpdateScoreboard scores)
     {
         for (int i = 0; i <= scores.topScoresNames.Length - 1; i++)
-        {
             savedNames[i] = scores.topScoresNames[i];
-        }
     }
 }
