@@ -8,6 +8,9 @@ public class ButtonActions : MonoBehaviour
 
     private UnityAction modeSwitch;
     private UnityAction sceneSwitch;
+    private UnityAction resetScore;
+
+    private UpdateScoreboard scoreboardScript;
 
     public GameObject arcadeShooting;
     public GameObject aimPractice;
@@ -16,18 +19,21 @@ public class ButtonActions : MonoBehaviour
     {
         modeSwitch = new UnityAction(SwitchModes);
         sceneSwitch = new UnityAction(SwitchScenes);
+        resetScore = new UnityAction(ResetScore);
     }
 
     void OnEnable()
     {
         EventManager.StartListening("ModeSwitch", modeSwitch);
         EventManager.StartListening("SceneSwitch", sceneSwitch);
+        EventManager.StartListening("ResetScore", resetScore);
     }
 
     void OnDisable()
     {
         EventManager.StopListening("ModeSwitch", modeSwitch);
         EventManager.StopListening("SceneSwitch", sceneSwitch);
+        EventManager.StartListening("ResetScore", resetScore);
     }
 
     void SwitchModes()
@@ -54,5 +60,10 @@ public class ButtonActions : MonoBehaviour
 
         else if (scene.name == "TestZone")
             SceneManager.LoadScene("Experimenting");
+    }
+
+    void ResetScore()
+    {
+        scoreboardScript.Reset();
     }
 }

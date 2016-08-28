@@ -136,7 +136,7 @@ public class UpdateScoreboard : MonoBehaviour
             return;
     }
 
-    void Reset()
+    public void Reset()
     {
         for (int i = 0; i <= topScores.Length - 1; i++)
         {

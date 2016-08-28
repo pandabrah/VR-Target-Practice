@@ -66,6 +66,8 @@ public class ButtonInput : MonoBehaviour
                     EventManager.TriggerEvent("ModeSwitch");
                 else if (this.name == "Scene Button")
                     EventManager.TriggerEvent("SceneSwitch");
+                else if (this.name == "Reset Score Button")
+                    EventManager.TriggerEvent("ResetScore");
                 else
                     return;
             }
@@ -100,5 +102,8 @@ public class ButtonInput : MonoBehaviour
             else if (isTestZone == true)
                 buttonTxt.text = ("To Experimenting");
         }
+
+        if (this.name == "Reset Score Button")
+            buttonTxt.text = ("Reset Highscores");
     }
 }
