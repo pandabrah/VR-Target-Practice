@@ -1,0 +1,132 @@
+fileFormatVersion: 2
+guid: 2538811e8ae174547a3974ca30de72e4
+timeCreated: 1472459717
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: BezierCurve
+    100002: BezierCurve_MeshPart0
+    100004: BezierCurve_MeshPart1
+    100006: BezierCurve_MeshPart2
+    100008: BezierCurve_MeshPart3
+    100010: BezierCurve_MeshPart4
+    100012: BezierCurve_MeshPart5
+    100014: BezierCurve_MeshPart6
+    100016: BezierCurve_MeshPart7
+    100018: BezierCurve_MeshPart8
+    100020: BezierCurve_MeshPart9
+    100022: Sun
+    100024: //RootNode
+    100026: Tabletop
+    400000: BezierCurve
+    400002: BezierCurve_MeshPart0
+    400004: BezierCurve_MeshPart1
+    400006: BezierCurve_MeshPart2
+    400008: BezierCurve_MeshPart3
+    400010: BezierCurve_MeshPart4
+    400012: BezierCurve_MeshPart5
+    400014: BezierCurve_MeshPart6
+    400016: BezierCurve_MeshPart7
+    400018: BezierCurve_MeshPart8
+    400020: BezierCurve_MeshPart9
+    400022: Sun
+    400024: //RootNode
+    400026: Tabletop
+    2300000: BezierCurve_MeshPart0
+    2300002: BezierCurve_MeshPart1
+    2300004: BezierCurve_MeshPart2
+    2300006: BezierCurve_MeshPart3
+    2300008: BezierCurve_MeshPart4
+    2300010: BezierCurve_MeshPart5
+    2300012: BezierCurve_MeshPart6
+    2300014: BezierCurve_MeshPart7
+    2300016: BezierCurve_MeshPart8
+    2300018: BezierCurve_MeshPart9
+    2300020: Tabletop
+    3300000: BezierCurve_MeshPart0
+    3300002: BezierCurve_MeshPart1
+    3300004: BezierCurve_MeshPart2
+    3300006: BezierCurve_MeshPart3
+    3300008: BezierCurve_MeshPart4
+    3300010: BezierCurve_MeshPart5
+    3300012: BezierCurve_MeshPart6
+    3300014: BezierCurve_MeshPart7
+    3300016: BezierCurve_MeshPart8
+    3300018: BezierCurve_MeshPart9
+    3300020: Tabletop
+    4300000: BezierCurve_MeshPart0
+    4300002: BezierCurve_MeshPart1
+    4300004: BezierCurve_MeshPart2
+    4300006: BezierCurve_MeshPart3
+    4300008: BezierCurve_MeshPart4
+    4300010: BezierCurve_MeshPart5
+    4300012: BezierCurve_MeshPart6
+    4300014: BezierCurve_MeshPart7
+    4300016: BezierCurve_MeshPart8
+    4300018: BezierCurve_MeshPart9
+    4300020: Tabletop
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
